@@ -1,0 +1,80 @@
+import { openDB } from 'idb'
+import type { Article, ProductRecommendation, SyncQueueItem } from '@/types/content'
+
+const DB_NAME = 'vida-mascotera-db'
+const DB_VERSION = 1
+
+export const dbPromise = openDB(DB_NAME, DB_VERSION, {
+  upgrade(db) {
+    if (!db.objectStoreNames.contains('favorites')) {
+      db.createObjectStore('favorites', { keyPath: 'id' })
+    }
+    if (!db.objectStoreNames.contains('content')) {
+      db.createObjectStore('content', { keyPath: 'id' })
+    }
+    if (!db.objectStoreNames.contains('products')) {
+      db.createObjectStore('products', { keyPath: 'id' })
+    }
+    if (!db.objectStoreNames.contains('syncQueue')) {
+      db.createObjectStore('syncQueue', { keyPath: 'id' })
+    }
+  },
+})
+
+export async function cacheArticles(articles: Article[]) {
+  const db = await dbPromise
+  const tx = db.transaction('content', 'readwrite')
+  await Promise.all(articles.map((article) => tx.store.put(article)))
+  await tx.done
+}
+
+export async function cacheProducts(products: ProductRecommendation[]) {
+  const db = await dbPromise
+  const tx = db.transaction('products', 'readwrite')
+  await Promise.all(products.map((product) => tx.store.put(product)))
+  await tx.done
+}
+
+export async function getCachedArticles(): Promise<Article[]> {
+  const db = await dbPromise
+  return db.getAll('content')
+}
+
+export async function getCachedProducts(): Promise<ProductRecommendation[]> {
+  const db = await dbPromise
+  return db.getAll('products')
+}
+
+export async function saveFavorites(ids: string[]) {
+  const db = await dbPromise
+  const tx = db.transaction('favorites', 'readwrite')
+  const existing = (await tx.store.getAllKeys()).map(String)
+
+  await Promise.all(ids.map((id) => tx.store.put({ id })))
+  await Promise.all(existing.filter((id) => !ids.includes(id)).map((id) => tx.store.delete(id)))
+  await tx.done
+}
+
+export async function getFavorites(): Promise<string[]> {
+  const db = await dbPromise
+  const records = await db.getAll('favorites')
+  return records.map((record) => String(record.id))
+}
+
+export async function enqueueSync(item: SyncQueueItem) {
+  const db = await dbPromise
+  await db.put('syncQueue', item)
+}
+
+export async function getSyncQueue(): Promise<SyncQueueItem[]> {
+  const db = await dbPromise
+  return db.getAll('syncQueue')
+}
+
+export async function clearSyncQueue(ids: string[]) {
+  const db = await dbPromise
+  const tx = db.transaction('syncQueue', 'readwrite')
+  await Promise.all(ids.map((id) => tx.store.delete(id)))
+  await tx.done
+}
+
