@@ -16,6 +16,14 @@ export interface NavItem {
   description: string
 }
 
+export interface SeoMetadata {
+  title: string
+  description: string
+  image?: string
+  type?: 'website' | 'article' | 'product'
+  canonicalPath?: string
+}
+
 export interface CategoryHighlight {
   id: string
   title: string
@@ -53,6 +61,7 @@ export interface Article {
   readTime: string
   author: string
   publishedAt: string
+  updatedAt?: string
   featured?: boolean
   image: string
   tags: string[]
@@ -67,15 +76,20 @@ export interface Article {
 
 export interface ProductRecommendation {
   id: string
+  slug: string
   name: string
   category: 'perros' | 'gatos' | 'accesorios' | 'alimentacion'
   description: string
+  longDescription: string
+  useCases: string[]
   rating: number
   priceLabel: string
   affiliateHint: string
   image: string
   badge: string
   ctaLabel: string
+  seoTitle: string
+  seoDescription: string
 }
 
 export interface StarterTip {
@@ -100,7 +114,60 @@ export interface UserProfile {
 
 export interface SyncQueueItem {
   id: string
-  type: 'favorite' | 'preference'
+  type: 'favorite' | 'preference' | 'contact_message'
   payload: unknown
   createdAt: string
+}
+
+export interface ContactMessageInput {
+  name: string
+  email: string
+  subject: string
+  message: string
+}
+
+export interface ContactMessageRecord extends ContactMessageInput {
+  id: string
+  createdAt: string
+  status: 'pending' | 'sent'
+}
+
+export interface SupabaseArticleDTO {
+  id: string
+  slug: string | null
+  title: string
+  excerpt: string
+  category: PetCategory
+  read_time: string
+  author: string
+  published_at: string
+  updated_at?: string | null
+  featured?: boolean | null
+  image: string
+  tags?: string[] | null
+  hero_note?: string | null
+  body?: ArticleSection[] | null
+  takeaways?: string[] | null
+  cta_label?: string | null
+  seo_title?: string | null
+  seo_description?: string | null
+  comparison_table?: ComparisonTable | null
+}
+
+export interface SupabaseProductDTO {
+  id: string
+  slug?: string | null
+  name: string
+  category: ProductRecommendation['category']
+  description: string
+  long_description?: string | null
+  use_cases?: string[] | null
+  rating: number
+  price_label: string
+  affiliate_hint: string
+  image: string
+  badge?: string | null
+  cta_label?: string | null
+  seo_title?: string | null
+  seo_description?: string | null
 }

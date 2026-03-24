@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase'
 
 export async function signInWithMagicLink(email: string) {
   if (!supabase) {
-    throw new Error('Supabase no está configurado.')
+    throw new Error('El acceso por correo todavia no esta disponible.')
   }
 
   return supabase.auth.signInWithOtp({
@@ -19,4 +19,17 @@ export async function signOut() {
   }
 
   await supabase.auth.signOut()
+}
+
+export async function getCurrentUserId() {
+  if (!supabase) {
+    return null
+  }
+
+  const { data, error } = await supabase.auth.getUser()
+  if (error || !data.user) {
+    return null
+  }
+
+  return data.user.id
 }

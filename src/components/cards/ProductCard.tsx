@@ -1,4 +1,5 @@
 import { ArrowUpRight, Star } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import type { ProductRecommendation } from '@/types/content'
 
 export function ProductCard({ product }: { product: ProductRecommendation }) {
@@ -28,10 +29,13 @@ export function ProductCard({ product }: { product: ProductRecommendation }) {
           <p className="text-sm font-semibold text-slate-800">{product.priceLabel}</p>
           <p className="mt-2 text-sm leading-6 text-slate-500">{product.affiliateHint}</p>
         </div>
-        <button className="inline-flex items-center gap-2 text-sm font-semibold text-brand-800" type="button">
+        <Link
+          className="inline-flex items-center gap-2 text-sm font-semibold text-brand-800"
+          to={`/recomendaciones/${product.slug}`}
+        >
           {product.ctaLabel}
           <ArrowUpRight className="h-4 w-4" />
-        </button>
+        </Link>
       </div>
     </article>
   )

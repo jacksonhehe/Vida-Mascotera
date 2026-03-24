@@ -1,108 +1,155 @@
 import { cacheArticles, cacheProducts, getCachedArticles, getCachedProducts } from '@/lib/indexed-db'
 import { mockArticles, mockProducts } from '@/lib/mock-data'
 import { isSupabaseConfigured, supabase } from '@/lib/supabase'
-import type { Article, ProductRecommendation } from '@/types/content'
+import type { Article, ProductRecommendation, SupabaseArticleDTO, SupabaseProductDTO } from '@/types/content'
+
+class ContentServiceError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'ContentServiceError'
+  }
+}
 
 function sortArticles(items: Article[]) {
   return [...items].sort((left, right) => new Date(right.publishedAt).getTime() - new Date(left.publishedAt).getTime())
 }
 
+function isArticleDto(value: unknown): value is SupabaseArticleDTO {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+
+  const candidate = value as Record<string, unknown>
+  return typeof candidate.id === 'string' && typeof candidate.title === 'string' && typeof candidate.excerpt === 'string'
+}
+
+function isProductDto(value: unknown): value is SupabaseProductDTO {
+  if (!value || typeof value !== 'object') {
+    return false
+  }
+
+  const candidate = value as Record<string, unknown>
+  return typeof candidate.id === 'string' && typeof candidate.name === 'string' && typeof candidate.description === 'string'
+}
+
+function mapArticleDto(dto: SupabaseArticleDTO): Article {
+  return {
+    id: dto.id,
+    slug: dto.slug ?? dto.id,
+    title: dto.title,
+    excerpt: dto.excerpt,
+    category: dto.category,
+    readTime: dto.read_time,
+    author: dto.author,
+    publishedAt: dto.published_at,
+    updatedAt: dto.updated_at ?? dto.published_at,
+    featured: dto.featured ?? false,
+    image: dto.image,
+    tags: dto.tags ?? [],
+    heroNote: dto.hero_note ?? dto.excerpt,
+    body: dto.body ?? [],
+    takeaways: dto.takeaways ?? [],
+    ctaLabel: dto.cta_label ?? 'Seguir leyendo',
+    seoTitle: dto.seo_title ?? dto.title,
+    seoDescription: dto.seo_description ?? dto.excerpt,
+    comparisonTable: dto.comparison_table ?? undefined,
+  }
+}
+
+function mapProductDto(dto: SupabaseProductDTO): ProductRecommendation {
+  return {
+    id: dto.id,
+    slug: dto.slug ?? dto.id,
+    name: dto.name,
+    category: dto.category,
+    description: dto.description,
+    longDescription: dto.long_description ?? dto.description,
+    useCases: dto.use_cases ?? [],
+    rating: dto.rating,
+    priceLabel: dto.price_label,
+    affiliateHint: dto.affiliate_hint,
+    image: dto.image,
+    badge: dto.badge ?? 'Recomendado',
+    ctaLabel: dto.cta_label ?? 'Ver recomendacion',
+    seoTitle: dto.seo_title ?? dto.name,
+    seoDescription: dto.seo_description ?? dto.description,
+  }
+}
+
+async function loadArticlesFromSupabase() {
+  if (!isSupabaseConfigured || !supabase) {
+    throw new ContentServiceError('Supabase no esta configurado.')
+  }
+
+  const { data, error } = await supabase.from('articles').select('*').order('published_at', { ascending: false })
+  if (error) {
+    throw new ContentServiceError(error.message)
+  }
+
+  if (!data?.length) {
+    throw new ContentServiceError('No se encontraron articulos remotos.')
+  }
+
+  const validated = data.filter(isArticleDto)
+  if (!validated.length) {
+    throw new ContentServiceError('La respuesta remota de articulos no cumple el formato esperado.')
+  }
+
+  return sortArticles(validated.map(mapArticleDto))
+}
+
+async function loadProductsFromSupabase() {
+  if (!isSupabaseConfigured || !supabase) {
+    throw new ContentServiceError('Supabase no esta configurado.')
+  }
+
+  const { data, error } = await supabase.from('products').select('*')
+  if (error) {
+    throw new ContentServiceError(error.message)
+  }
+
+  if (!data?.length) {
+    throw new ContentServiceError('No se encontraron productos remotos.')
+  }
+
+  const validated = data.filter(isProductDto)
+  if (!validated.length) {
+    throw new ContentServiceError('La respuesta remota de productos no cumple el formato esperado.')
+  }
+
+  return validated.map(mapProductDto)
+}
+
 export async function getArticles(): Promise<Article[]> {
   try {
-    if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase.from('articles').select('*').order('published_at', { ascending: false })
-
-      if (error) {
-        throw error
-      }
-
-      if (data?.length) {
-        const mapped = data.map(
-          (item): Article => ({
-            id: item.id,
-            slug: item.slug ?? item.id,
-            title: item.title,
-            excerpt: item.excerpt,
-            category: item.category,
-            readTime: item.read_time,
-            author: item.author,
-            publishedAt: item.published_at,
-            featured: item.featured,
-            image: item.image,
-            tags: item.tags ?? [],
-            heroNote: item.hero_note ?? item.excerpt,
-            body: item.body ?? [],
-            takeaways: item.takeaways ?? [],
-            ctaLabel: item.cta_label ?? 'Seguir leyendo',
-            seoTitle: item.seo_title ?? item.title,
-            seoDescription: item.seo_description ?? item.excerpt,
-            comparisonTable: item.comparison_table ?? undefined,
-          }),
-        )
-
-        const sorted = sortArticles(mapped)
-        await cacheArticles(sorted)
-        return sorted
-      }
-    }
+    const remote = await loadArticlesFromSupabase()
+    await cacheArticles(remote)
+    return remote
   } catch {
     const cached = await getCachedArticles()
     if (cached.length) {
       return sortArticles(cached)
     }
-  }
 
-  const cached = await getCachedArticles()
-  if (cached.length) {
-    return sortArticles(cached)
+    await cacheArticles(mockArticles)
+    return sortArticles(mockArticles)
   }
-
-  await cacheArticles(mockArticles)
-  return sortArticles(mockArticles)
 }
 
 export async function getProducts(): Promise<ProductRecommendation[]> {
   try {
-    if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase.from('products').select('*')
-
-      if (error) {
-        throw error
-      }
-
-      if (data?.length) {
-        const mapped = data.map(
-          (item): ProductRecommendation => ({
-            id: item.id,
-            name: item.name,
-            category: item.category,
-            description: item.description,
-            rating: item.rating,
-            priceLabel: item.price_label,
-            affiliateHint: item.affiliate_hint,
-            image: item.image,
-            badge: item.badge ?? 'Recomendado',
-            ctaLabel: item.cta_label ?? 'Ver recomendación',
-          }),
-        )
-        await cacheProducts(mapped)
-        return mapped
-      }
-    }
+    const remote = await loadProductsFromSupabase()
+    await cacheProducts(remote)
+    return remote
   } catch {
     const cached = await getCachedProducts()
     if (cached.length) {
       return cached
     }
-  }
 
-  const cached = await getCachedProducts()
-  if (cached.length) {
-    return cached
+    await cacheProducts(mockProducts)
+    return mockProducts
   }
-
-  await cacheProducts(mockProducts)
-  return mockProducts
 }
 
 export function getArticleBySlug(articles: Article[], slug?: string) {
@@ -110,7 +157,13 @@ export function getArticleBySlug(articles: Article[], slug?: string) {
 }
 
 export function getRelatedArticles(articles: Article[], current: Article) {
-  return articles
-    .filter((article) => article.id !== current.id && article.category === current.category)
-    .slice(0, 3)
+  return articles.filter((article) => article.id !== current.id && article.category === current.category).slice(0, 3)
+}
+
+export function getProductBySlug(products: ProductRecommendation[], slugOrId?: string) {
+  return products.find((product) => product.slug === slugOrId || product.id === slugOrId)
+}
+
+export function getRelatedProducts(products: ProductRecommendation[], current: ProductRecommendation) {
+  return products.filter((product) => product.id !== current.id && product.category === current.category).slice(0, 3)
 }

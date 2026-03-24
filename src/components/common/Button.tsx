@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { cn } from '@/utils/cn'
 
@@ -8,6 +8,8 @@ interface ButtonProps {
   onClick?: () => void
   variant?: 'primary' | 'secondary' | 'ghost'
   className?: string
+  type?: ButtonHTMLAttributes<HTMLButtonElement>['type']
+  disabled?: boolean
 }
 
 const variantClasses = {
@@ -16,9 +18,9 @@ const variantClasses = {
   ghost: 'bg-transparent text-brand-900 hover:bg-brand-50',
 }
 
-export function Button({ children, to, onClick, variant = 'primary', className }: ButtonProps) {
+export function Button({ children, to, onClick, variant = 'primary', className, type = 'button', disabled = false }: ButtonProps) {
   const classes = cn(
-    'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition duration-200',
+    'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition duration-200 focus:outline-none focus:ring-2 focus:ring-brand-300 disabled:cursor-not-allowed disabled:opacity-60',
     variantClasses[variant],
     className,
   )
@@ -32,7 +34,7 @@ export function Button({ children, to, onClick, variant = 'primary', className }
   }
 
   return (
-    <button className={classes} onClick={onClick} type="button">
+    <button className={classes} disabled={disabled} onClick={onClick} type={type}>
       {children}
     </button>
   )

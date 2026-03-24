@@ -1,5 +1,5 @@
 import { useEffect, useState, useEffectEvent } from 'react'
-import { getFavorites } from '@/lib/indexed-db'
+import { getFavorites, getStoredPreferences } from '@/lib/indexed-db'
 import { isSupabaseConfigured, supabase } from '@/lib/supabase'
 import { getArticles, getProducts } from '@/services/content-service'
 import { persistFavoriteIds, persistPreferences, syncPendingChanges } from '@/services/offline-sync-service'
@@ -17,7 +17,8 @@ export function useAppBootstrap() {
   const hydrated = useAppStore((state) => state.hydrated)
   const setOffline = useAppStore((state) => state.setOffline)
   const setProfile = useAppStore((state) => state.setProfile)
-  const toggleFavorite = useAppStore((state) => state.toggleFavorite)
+  const setFavorites = useAppStore((state) => state.setFavorites)
+  const setPreferences = useAppStore((state) => state.setPreferences)
 
   const handleConnectivity = useEffectEvent(async () => {
     const offline = !navigator.onLine
@@ -27,7 +28,7 @@ export function useAppBootstrap() {
       try {
         await syncPendingChanges()
       } catch {
-        setError('Recuperamos la conexión, pero aún estamos terminando de sincronizar tus cambios.')
+        setError('Recuperamos la conexion, pero aun estamos terminando de sincronizar tus cambios.')
       }
     }
   })
@@ -42,7 +43,7 @@ export function useAppBootstrap() {
         setArticles(articleData)
         setProducts(productData)
       } catch {
-        setError('No pudimos actualizar el contenido en este momento. Si tienes conexión limitada, seguiremos mostrando lo disponible.')
+        setError('No pudimos actualizar el contenido en este momento. Seguiremos mostrando lo disponible.')
       } finally {
         setLoading(false)
       }
@@ -52,28 +53,34 @@ export function useAppBootstrap() {
   }, [])
 
   useEffect(() => {
-    if (!hydrated || favorites.length > 0) {
+    if (!hydrated) {
       return
     }
 
-    void getFavorites()
-      .then((storedFavorites) => {
-        storedFavorites.forEach((id) => toggleFavorite(id))
+    void Promise.all([getFavorites(), getStoredPreferences()])
+      .then(([storedFavorites, storedPreferences]) => {
+        if (storedFavorites.length) {
+          setFavorites(storedFavorites)
+        }
+
+        if (storedPreferences) {
+          setPreferences(storedPreferences)
+        }
       })
       .catch(() => {
-        setError('Tus favoritos no pudieron cargarse por completo, pero el resto del sitio sigue disponible.')
+        setError((current) => current ?? 'Algunos datos guardados localmente no pudieron restaurarse por completo.')
       })
-  }, [favorites.length, hydrated, toggleFavorite])
+  }, [hydrated, setFavorites, setPreferences])
 
   useEffect(() => {
     void persistFavoriteIds(favorites).catch(() => {
-      setError('Guardaremos tus favoritos en cuanto la conexión esté más estable.')
+      setError('Guardaremos tus favoritos en cuanto la conexion este mas estable.')
     })
   }, [favorites])
 
   useEffect(() => {
     void persistPreferences(preferences).catch(() => {
-      setError('Tus preferencias se conservarán localmente hasta que podamos sincronizarlas.')
+      setError('Tus preferencias se conservaran localmente hasta que podamos sincronizarlas.')
     })
   }, [preferences])
 
@@ -108,7 +115,7 @@ export function useAppBootstrap() {
         })
       })
       .catch(() => {
-        setError((current) => current ?? 'Tu sesión no pudo restaurarse del todo, pero puedes seguir explorando sin problema.')
+        setError((current) => current ?? 'Tu sesion no pudo restaurarse del todo, pero puedes seguir explorando.')
       })
   }, [setProfile])
 

@@ -1,22 +1,35 @@
 import { openDB } from 'idb'
-import type { Article, ProductRecommendation, SyncQueueItem } from '@/types/content'
+import type { Article, ContactMessageRecord, ProductRecommendation, SyncQueueItem, UserPreferences } from '@/types/content'
 
 const DB_NAME = 'vida-mascotera-db'
-const DB_VERSION = 1
+const DB_VERSION = 2
 
 export const dbPromise = openDB(DB_NAME, DB_VERSION, {
-  upgrade(db) {
+  upgrade(db, oldVersion) {
     if (!db.objectStoreNames.contains('favorites')) {
       db.createObjectStore('favorites', { keyPath: 'id' })
     }
+
     if (!db.objectStoreNames.contains('content')) {
       db.createObjectStore('content', { keyPath: 'id' })
     }
+
     if (!db.objectStoreNames.contains('products')) {
       db.createObjectStore('products', { keyPath: 'id' })
     }
+
     if (!db.objectStoreNames.contains('syncQueue')) {
       db.createObjectStore('syncQueue', { keyPath: 'id' })
+    }
+
+    if (oldVersion < 2) {
+      if (!db.objectStoreNames.contains('contactMessages')) {
+        db.createObjectStore('contactMessages', { keyPath: 'id' })
+      }
+
+      if (!db.objectStoreNames.contains('preferences')) {
+        db.createObjectStore('preferences', { keyPath: 'id' })
+      }
     }
   },
 })
@@ -61,6 +74,36 @@ export async function getFavorites(): Promise<string[]> {
   return records.map((record) => String(record.id))
 }
 
+export async function savePreferences(preferences: UserPreferences) {
+  const db = await dbPromise
+  await db.put('preferences', { id: 'current', ...preferences })
+}
+
+export async function getStoredPreferences(): Promise<UserPreferences | null> {
+  const db = await dbPromise
+  const record = await db.get('preferences', 'current')
+
+  if (!record) {
+    return null
+  }
+
+  return {
+    favoriteTopics: record.favoriteTopics,
+    preferredPet: record.preferredPet,
+    newsletter: record.newsletter,
+  }
+}
+
+export async function saveContactMessage(message: ContactMessageRecord) {
+  const db = await dbPromise
+  await db.put('contactMessages', message)
+}
+
+export async function getContactMessages(): Promise<ContactMessageRecord[]> {
+  const db = await dbPromise
+  return db.getAll('contactMessages')
+}
+
 export async function enqueueSync(item: SyncQueueItem) {
   const db = await dbPromise
   await db.put('syncQueue', item)
@@ -77,4 +120,3 @@ export async function clearSyncQueue(ids: string[]) {
   await Promise.all(ids.map((id) => tx.store.delete(id)))
   await tx.done
 }
-

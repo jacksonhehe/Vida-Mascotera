@@ -11,9 +11,11 @@ interface AppState {
   profile: UserProfile | null
   hydrated: boolean
   toggleFavorite: (id: string) => void
+  setFavorites: (favorites: string[]) => void
   setSelectedCategory: (category: PetCategory | 'todas') => void
   setSearchTerm: (term: string) => void
   updatePreferences: (preferences: Partial<UserPreferences>) => void
+  setPreferences: (preferences: UserPreferences) => void
   setOffline: (isOffline: boolean) => void
   setProfile: (profile: UserProfile | null) => void
   setHydrated: (hydrated: boolean) => void
@@ -41,10 +43,12 @@ export const useAppStore = create<AppState>()(
             ? state.favorites.filter((favorite) => favorite !== id)
             : [...state.favorites, id],
         })),
+      setFavorites: (favorites) => set({ favorites }),
       setSelectedCategory: (selectedCategory) => set({ selectedCategory }),
       setSearchTerm: (searchTerm) => set({ searchTerm }),
       updatePreferences: (preferences) =>
         set((state) => ({ preferences: { ...state.preferences, ...preferences } })),
+      setPreferences: (preferences) => set({ preferences }),
       setOffline: (isOffline) => set({ isOffline }),
       setProfile: (profile) => set({ profile }),
       setHydrated: (hydrated) => set({ hydrated }),

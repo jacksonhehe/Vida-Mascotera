@@ -19,6 +19,7 @@ export const router = createBrowserRouter([
       { path: 'comparativas/:slug', element: <ShellPage page="comparison-detail" /> },
       { path: 'blog', element: <ShellPage page="blog" /> },
       { path: 'blog/:slug', element: <ShellPage page="article-detail" /> },
+      { path: 'recomendaciones/:slug', element: <ShellPage page="product-detail" /> },
       { path: 'contacto', element: <ShellPage page="contacto" /> },
       { path: '*', element: <ShellPage page="404" /> },
     ],
