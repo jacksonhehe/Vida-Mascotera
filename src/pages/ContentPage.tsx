@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { ArticleCard } from '@/components/cards/ArticleCard'
 import { ProductCard } from '@/components/cards/ProductCard'
 import { PageHero } from '@/components/sections/PageHero'
@@ -19,6 +19,11 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
   const setSelectedCategory = useAppStore((state) => state.setSelectedCategory)
   const setSearchTerm = useAppStore((state) => state.setSearchTerm)
 
+  useEffect(() => {
+    setSelectedCategory('todas')
+    setSearchTerm('')
+  }, [category, setSearchTerm, setSelectedCategory])
+
   const filteredArticles = useMemo(
     () =>
       articles.filter((article) => {
@@ -27,7 +32,9 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
         const searchMatch =
           searchTerm.length === 0 ||
           article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          article.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
+          article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          article.tags.join(' ').toLowerCase().includes(searchTerm.toLowerCase())
+
         return categoryMatch && searchMatch
       }),
     [articles, category, searchTerm, selectedCategory],
@@ -38,15 +45,24 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
     [category, products],
   )
 
+  const emptyTitle =
+    searchTerm.length > 0 ? 'No encontramos resultados con esa búsqueda' : 'Aún no tenemos contenido visible en esta sección'
+
+  const emptyBody =
+    searchTerm.length > 0
+      ? 'Prueba con otra palabra clave o vuelve a la vista completa para descubrir más lecturas y comparativas.'
+      : 'Estamos preparando nuevas publicaciones para esta categoría. Mientras tanto, puedes explorar el blog o nuestras comparativas.'
+
   return (
     <div className="space-y-10">
       <PageHero emphasis={copy.emphasis} intro={copy.intro} title={copy.title} />
+
       <section className="rounded-[2rem] bg-white p-6 shadow-soft">
         <div className="grid gap-4 md:grid-cols-[0.7fr_0.3fr]">
           <input
             className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400"
             onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Buscar artículos, temas o términos clave"
+            placeholder="Buscar por tema, necesidad o palabra clave"
             type="search"
             value={searchTerm}
           />
@@ -55,29 +71,36 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
             onChange={(event) => setSelectedCategory(event.target.value as PetCategory | 'todas')}
             value={selectedCategory}
           >
-            <option value="todas">Filtrar por: esta sección</option>
+            <option value="todas">Mostrar solo esta sección</option>
             <option value={category}>{category}</option>
             <option value="blog">blog</option>
             <option value="comparativas">comparativas</option>
           </select>
         </div>
       </section>
+
       <section className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-slate-900">Artículos relacionados</h2>
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900">Contenido relacionado</h2>
+            <p className="mt-1 text-sm text-slate-500">Encuentra ideas útiles para esta etapa, necesidad o tipo de mascota.</p>
+          </div>
           <p className="text-sm text-slate-500">{filteredArticles.length} resultados</p>
         </div>
+
         <div className="grid gap-6 lg:grid-cols-3">
           {filteredArticles.length ? (
             filteredArticles.map((article) => <ArticleCard article={article} key={article.id} />)
           ) : (
-            <div className="rounded-[1.5rem] bg-white p-6 text-sm text-slate-600 shadow-soft">
-              No hay coincidencias con los filtros actuales.
+            <div className="rounded-[1.75rem] bg-white p-8 text-center shadow-soft lg:col-span-3">
+              <h3 className="text-2xl font-semibold text-slate-900">{emptyTitle}</h3>
+              <p className="mt-3 text-sm leading-7 text-slate-600">{emptyBody}</p>
             </div>
           )}
         </div>
       </section>
-      {filteredProducts.length > 0 && (
+
+      {filteredProducts.length > 0 ? (
         <section className="space-y-6">
           <h2 className="text-2xl font-semibold text-slate-900">Selección recomendada</h2>
           <div className="grid gap-6 lg:grid-cols-3">
@@ -86,7 +109,7 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
             ))}
           </div>
         </section>
-      )}
+      ) : null}
     </div>
   )
 }

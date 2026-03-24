@@ -20,7 +20,7 @@ export function MainLayout() {
             </div>
             <div>
               <p className="text-lg font-semibold">Vida Mascotera</p>
-              <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Pet care premium</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Cuidado, hogar y bienestar pet</p>
             </div>
           </NavLink>
           <nav className="hidden items-center gap-1 lg:flex">
@@ -44,9 +44,10 @@ export function MainLayout() {
               Favoritos: <span className="font-semibold text-brand-800">{favoritesCount}</span>
             </div>
             <div className="hidden rounded-full bg-white px-4 py-2 text-sm text-slate-600 shadow-sm md:block">
-              {profile ? profile.fullName : 'Modo visitante'}
+              {profile ? profile.fullName : 'Bienvenido a Vida Mascotera'}
             </div>
             <button
+              aria-label={mobileOpen ? 'Cerrar navegación' : 'Abrir navegación'}
               className="rounded-full bg-white p-3 text-slate-700 lg:hidden"
               onClick={() => setMobileOpen((open) => !open)}
               type="button"
@@ -85,11 +86,11 @@ export function MainLayout() {
           <div className="space-y-4">
             <h3 className="text-xl font-semibold">Vida Mascotera</h3>
             <p className="max-w-md text-sm leading-7 text-slate-600">
-              Base profesional para contenido, recursos, perfiles, favoritos, comparativas y una futura capa comercial alrededor del universo pet.
+              Un espacio editorial para acompañarte con guías, comparativas y recomendaciones que hacen más fácil cuidar a quienes forman parte de tu familia.
             </p>
           </div>
           <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Secciones</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Explora</p>
             {navigationItems.slice(1, 8).map((item) => (
               <NavLink className="block text-sm text-slate-600 hover:text-brand-900" key={item.path} to={item.path}>
                 {item.label}
@@ -99,8 +100,8 @@ export function MainLayout() {
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Contacto</p>
             <p className="text-sm text-slate-600">hola@vidamascotera.com</p>
-            <p className="text-sm text-slate-600">Alianzas editoriales y colaboraciones de marca.</p>
-            <p className="text-sm text-slate-600">Arquitectura preparada para CRM y soporte.</p>
+            <p className="text-sm text-slate-600">Colaboraciones editoriales, campañas afines y proyectos de marca.</p>
+            <p className="text-sm text-slate-600">Base lista para seguir creciendo con autenticación y contenido real.</p>
           </div>
         </div>
       </footer>

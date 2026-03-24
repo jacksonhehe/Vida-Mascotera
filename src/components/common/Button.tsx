@@ -18,7 +18,7 @@ const variantClasses = {
 
 export function Button({ children, to, onClick, variant = 'primary', className }: ButtonProps) {
   const classes = cn(
-    'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition',
+    'inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition duration-200',
     variantClasses[variant],
     className,
   )
@@ -37,4 +37,3 @@ export function Button({ children, to, onClick, variant = 'primary', className }
     </button>
   )
 }
-

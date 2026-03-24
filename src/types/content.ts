@@ -25,8 +25,28 @@ export interface CategoryHighlight {
   image: string
 }
 
+export interface ArticleSection {
+  title: string
+  paragraphs: string[]
+}
+
+export interface ComparisonRow {
+  criteria: string
+  optionA: string
+  optionB: string
+  recommendation: string
+}
+
+export interface ComparisonTable {
+  title: string
+  optionALabel: string
+  optionBLabel: string
+  rows: ComparisonRow[]
+}
+
 export interface Article {
   id: string
+  slug: string
   title: string
   excerpt: string
   category: PetCategory
@@ -36,6 +56,13 @@ export interface Article {
   featured?: boolean
   image: string
   tags: string[]
+  heroNote: string
+  body: ArticleSection[]
+  takeaways: string[]
+  ctaLabel: string
+  seoTitle: string
+  seoDescription: string
+  comparisonTable?: ComparisonTable
 }
 
 export interface ProductRecommendation {
@@ -47,6 +74,8 @@ export interface ProductRecommendation {
   priceLabel: string
   affiliateHint: string
   image: string
+  badge: string
+  ctaLabel: string
 }
 
 export interface StarterTip {
@@ -75,4 +104,3 @@ export interface SyncQueueItem {
   payload: unknown
   createdAt: string
 }
-

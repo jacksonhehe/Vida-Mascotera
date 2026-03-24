@@ -10,6 +10,7 @@ export function useAppBootstrap() {
   const [articles, setArticles] = useState<Article[]>([])
   const [products, setProducts] = useState<ProductRecommendation[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const favorites = useAppStore((state) => state.favorites)
   const preferences = useAppStore((state) => state.preferences)
@@ -21,18 +22,30 @@ export function useAppBootstrap() {
   const handleConnectivity = useEffectEvent(async () => {
     const offline = !navigator.onLine
     setOffline(offline)
+
     if (!offline) {
-      await syncPendingChanges()
+      try {
+        await syncPendingChanges()
+      } catch {
+        setError('Recuperamos la conexión, pero aún estamos terminando de sincronizar tus cambios.')
+      }
     }
   })
 
   useEffect(() => {
     const load = async () => {
       setLoading(true)
-      const [articleData, productData] = await Promise.all([getArticles(), getProducts()])
-      setArticles(articleData)
-      setProducts(productData)
-      setLoading(false)
+      setError(null)
+
+      try {
+        const [articleData, productData] = await Promise.all([getArticles(), getProducts()])
+        setArticles(articleData)
+        setProducts(productData)
+      } catch {
+        setError('No pudimos actualizar el contenido en este momento. Si tienes conexión limitada, seguiremos mostrando lo disponible.')
+      } finally {
+        setLoading(false)
+      }
     }
 
     void load()
@@ -43,17 +56,25 @@ export function useAppBootstrap() {
       return
     }
 
-    void getFavorites().then((storedFavorites) => {
-      storedFavorites.forEach((id) => toggleFavorite(id))
-    })
+    void getFavorites()
+      .then((storedFavorites) => {
+        storedFavorites.forEach((id) => toggleFavorite(id))
+      })
+      .catch(() => {
+        setError('Tus favoritos no pudieron cargarse por completo, pero el resto del sitio sigue disponible.')
+      })
   }, [favorites.length, hydrated, toggleFavorite])
 
   useEffect(() => {
-    void persistFavoriteIds(favorites)
+    void persistFavoriteIds(favorites).catch(() => {
+      setError('Guardaremos tus favoritos en cuanto la conexión esté más estable.')
+    })
   }, [favorites])
 
   useEffect(() => {
-    void persistPreferences(preferences)
+    void persistPreferences(preferences).catch(() => {
+      setError('Tus preferencias se conservarán localmente hasta que podamos sincronizarlas.')
+    })
   }, [preferences])
 
   useEffect(() => {
@@ -72,19 +93,24 @@ export function useAppBootstrap() {
       return
     }
 
-    void supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) {
-        return
-      }
+    void supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        if (!data.user) {
+          return
+        }
 
-      setProfile({
-        id: data.user.id,
-        email: data.user.email ?? '',
-        fullName: data.user.user_metadata.full_name ?? 'Comunidad Vida Mascotera',
-        avatarUrl: data.user.user_metadata.avatar_url,
+        setProfile({
+          id: data.user.id,
+          email: data.user.email ?? '',
+          fullName: data.user.user_metadata.full_name ?? 'Comunidad Vida Mascotera',
+          avatarUrl: data.user.user_metadata.avatar_url,
+        })
       })
-    })
+      .catch(() => {
+        setError((current) => current ?? 'Tu sesión no pudo restaurarse del todo, pero puedes seguir explorando sin problema.')
+      })
   }, [setProfile])
 
-  return { articles, products, loading }
+  return { articles, products, loading, error }
 }

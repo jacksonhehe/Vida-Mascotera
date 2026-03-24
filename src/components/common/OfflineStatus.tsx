@@ -13,8 +13,7 @@ export function OfflineStatus() {
       )}
     >
       {isOffline ? <CloudOff size={14} /> : <Wifi size={14} />}
-      {isOffline ? 'Modo offline activo' : 'Sincronizado'}
+      {isOffline ? 'Estás navegando sin conexión' : 'Contenido sincronizado'}
     </div>
   )
 }
-

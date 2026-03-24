@@ -1,76 +1,79 @@
 import type { CategoryHighlight, NavItem, PetCategory, StarterTip } from '@/types/content'
 
 export const navigationItems: NavItem[] = [
-  { label: 'Inicio', path: '/', category: 'inicio', description: 'Portada editorial con recursos destacados.' },
-  { label: 'Perros', path: '/perros', category: 'perros', description: 'Rutinas, comportamiento, juegos y bienestar canino.' },
-  { label: 'Gatos', path: '/gatos', category: 'gatos', description: 'Enriquecimiento felino, salud y convivencia.' },
-  { label: 'Alimentacion', path: '/alimentacion', category: 'alimentacion', description: 'Guías de nutrición, ingredientes y formatos de comida.' },
-  { label: 'Salud y Cuidados', path: '/salud-cuidados', category: 'salud', description: 'Prevención, higiene, revisiones y primeros cuidados.' },
-  { label: 'Accesorios', path: '/accesorios', category: 'accesorios', description: 'Selección curada de productos útiles y duraderos.' },
-  { label: 'Comparativas', path: '/comparativas', category: 'comparativas', description: 'Análisis claros para decidir mejor antes de comprar.' },
-  { label: 'Blog', path: '/blog', category: 'blog', description: 'Artículos, tendencias y recomendaciones editoriales.' },
-  { label: 'Contacto', path: '/contacto', category: 'contacto', description: 'Consultas, alianzas y propuestas de colaboración.' },
+  { label: 'Inicio', path: '/', category: 'inicio', description: 'Ideas, guías y recomendaciones para cuidar mejor a tu mascota.' },
+  { label: 'Perros', path: '/perros', category: 'perros', description: 'Rutinas, conducta, paseo, descanso y vida diaria con perros.' },
+  { label: 'Gatos', path: '/gatos', category: 'gatos', description: 'Enriquecimiento, descanso, juego y bienestar felino en casa.' },
+  { label: 'Alimentación', path: '/alimentacion', category: 'alimentacion', description: 'Consejos para elegir mejor según etapa, rutina y necesidades reales.' },
+  { label: 'Salud y cuidados', path: '/salud-cuidados', category: 'salud', description: 'Prevención cotidiana, higiene y señales a las que conviene prestar atención.' },
+  { label: 'Accesorios', path: '/accesorios', category: 'accesorios', description: 'Selecciones útiles para comprar con criterio y evitar gastos innecesarios.' },
+  { label: 'Comparativas', path: '/comparativas', category: 'comparativas', description: 'Análisis claros para decidir entre opciones antes de comprar.' },
+  { label: 'Blog', path: '/blog', category: 'blog', description: 'Lecturas prácticas y cercanas para acompañarte en el día a día.' },
+  { label: 'Contacto', path: '/contacto', category: 'contacto', description: 'Consultas, colaboraciones y conversaciones de marca.' },
 ]
 
-export const categoryCopy: Record<Exclude<PetCategory, 'inicio' | 'contacto'>, { title: string; intro: string; emphasis: string }> = {
+export const categoryCopy: Record<
+  Exclude<PetCategory, 'inicio' | 'contacto'>,
+  { title: string; intro: string; emphasis: string }
+> = {
   perros: {
-    title: 'Perros felices, activos y equilibrados',
-    intro: 'Recursos para entender mejor su comportamiento, mejorar rutinas y elegir productos que realmente aporten valor.',
-    emphasis: 'Desde cachorros hasta perros senior, con enfoque práctico y confiable.',
+    title: 'Vida más tranquila y feliz para tu perro',
+    intro: 'Guías prácticas sobre rutinas, paseo, conducta, descanso y decisiones del día a día para convivir mejor.',
+    emphasis: 'Contenido pensado para tutores que buscan orientación clara, cálida y realista.',
   },
   gatos: {
-    title: 'Bienestar felino con una mirada serena y actual',
-    intro: 'Ideas de enriquecimiento, salud preventiva y convivencia para hogares que quieren respetar la naturaleza del gato.',
-    emphasis: 'Contenido pensado para espacios pequeños y necesidades reales.',
+    title: 'Bienestar felino con sensibilidad y criterio',
+    intro: 'Ideas para crear un hogar más amable para tu gato, con juego, calma, observación y cuidado diario.',
+    emphasis: 'Desde enriquecimiento en departamentos hasta hábitos que reducen estrés.',
   },
   alimentacion: {
-    title: 'Nutrición informada para cada etapa',
-    intro: 'Comparativas, raciones, tipos de alimento y criterios claros para tomar mejores decisiones todos los días.',
-    emphasis: 'Explicamos lo esencial sin caer en ruido ni tecnicismos innecesarios.',
+    title: 'Elegir mejor también es una forma de cuidar',
+    intro: 'Comparativas, recomendaciones y explicaciones simples para entender formatos, rutinas y compras más inteligentes.',
+    emphasis: 'Menos ruido, más claridad para tomar decisiones con confianza.',
   },
   salud: {
-    title: 'Prevención y cuidados diarios',
-    intro: 'Higiene, vacunas, señales de alerta y buenas prácticas para sostener bienestar a largo plazo.',
-    emphasis: 'Base editorial lista para crecer con fichas, checklists y recursos descargables.',
+    title: 'Pequeños cuidados que hacen una gran diferencia',
+    intro: 'Rutinas breves, señales a observar y hábitos preventivos para acompañar el bienestar de tu mascota sin dramatismos.',
+    emphasis: 'Una base clara para construir hábitos sostenibles en casa.',
   },
   accesorios: {
-    title: 'Productos útiles con enfoque premium',
-    intro: 'Selección de accesorios funcionales y duraderos para paseo, descanso, juego, viaje y organización en casa.',
-    emphasis: 'Preparado para evolucionar hacia un modelo de afiliación y recomendación comercial.',
+    title: 'Accesorios bonitos, útiles y realmente durables',
+    intro: 'Selecciones curadas para paseo, descanso, comida y hogar, con foco en comodidad, diseño y funcionalidad.',
+    emphasis: 'Recomendaciones hechas para comprar una vez y comprar mejor.',
   },
   comparativas: {
-    title: 'Comparativas honestas y accionables',
-    intro: 'Tablas claras, criterios consistentes y lectura rápida para elegir entre opciones sin perder tiempo.',
-    emphasis: 'Ideal para futuras integraciones de catálogos y monetización editorial.',
+    title: 'Comparativas honestas para decidir sin complicarte',
+    intro: 'Analizamos ventajas, límites y escenarios de uso para que elijas lo que encaja con tu rutina real.',
+    emphasis: 'Ideal para personas que quieren claridad antes de invertir.',
   },
   blog: {
-    title: 'Historias, recursos y actualidad para tutores',
-    intro: 'Una capa editorial flexible donde publicar guías evergreen, notas breves, entrevistas y contenido de comunidad.',
-    emphasis: 'Diseñado para escalar con CMS, SEO y contenido dinámico desde Supabase.',
+    title: 'Lecturas que acompañan la vida con tu mascota',
+    intro: 'Artículos cercanos, prácticos y bien aterrizados para cuidar, entender y disfrutar más cada etapa.',
+    emphasis: 'Una biblioteca editorial preparada para crecer contigo.',
   },
 }
 
 export const featuredCategories: CategoryHighlight[] = [
   {
     id: 'dog-routines',
-    title: 'Rutinas saludables para perros',
-    description: 'Paseos, descanso, juego y hábitos que reducen estrés y mejoran conducta.',
+    title: 'Rutinas que hacen más fácil convivir con tu perro',
+    description: 'Paseo, descanso, hábitos y señales simples para una vida cotidiana más serena.',
     path: '/perros',
     accent: 'brand',
     image: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'cat-home',
-    title: 'Espacios ideales para gatos',
-    description: 'Enriquecimiento vertical, seguridad en casa y bienestar felino diario.',
+    title: 'Un hogar pensado también para tu gato',
+    description: 'Enriquecimiento, juego y espacios que cuidan su calma sin romper la estética de tu casa.',
     path: '/gatos',
     accent: 'mint',
     image: 'https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'smart-feeding',
-    title: 'Alimentación con criterio',
-    description: 'Cómo leer etiquetas, ajustar por etapa y comparar formatos sin confusión.',
+    title: 'Alimentación clara, sin mitos ni confusión',
+    description: 'Comparativas simples para elegir formatos, rutinas y accesorios que sí aportan valor.',
     path: '/alimentacion',
     accent: 'cream',
     image: 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=1200&q=80',
@@ -78,8 +81,19 @@ export const featuredCategories: CategoryHighlight[] = [
 ]
 
 export const starterTips: StarterTip[] = [
-  { id: 'vet', title: 'Agenda una primera revisión veterinaria', body: 'Centraliza vacunas, desparasitación y una línea base de salud desde el inicio.' },
-  { id: 'space', title: 'Prepara un espacio seguro y predecible', body: 'Cama, agua, zona de descanso y rutinas simples reducen ansiedad y aceleran adaptación.' },
-  { id: 'feeding', title: 'No improvises con la alimentación', body: 'Mantén horarios y una transición gradual si cambias de alimento o formato.' },
+  {
+    id: 'vet',
+    title: 'Agenda una revisión veterinaria temprana',
+    body: 'Te dará una línea de base clara para vacunas, desparasitación, alimentación y señales a observar desde el inicio.',
+  },
+  {
+    id: 'space',
+    title: 'Prepara un espacio propio y predecible',
+    body: 'Una cama, agua fresca, calma y una rutina simple ayudan a que la adaptación sea mucho más llevadera.',
+  },
+  {
+    id: 'feeding',
+    title: 'Evita improvisar la alimentación',
+    body: 'Mantener horarios y hacer cambios graduales reduce molestias digestivas y te da más claridad sobre cómo responde tu mascota.',
+  },
 ]
-
