@@ -9,9 +9,45 @@ export async function signInWithMagicLink(email: string) {
   return supabase.auth.signInWithOtp({
     email,
     options: {
-      emailRedirectTo: window.location.origin,
+      emailRedirectTo: `${window.location.origin}/login`,
     },
   })
+}
+
+export async function signInWithPassword(email: string, password: string) {
+  if (!supabase) {
+    throw new Error('El acceso por correo todavía no está disponible.')
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (error) {
+    throw error
+  }
+}
+
+export async function signUpWithPassword(email: string, password: string, fullName: string) {
+  if (!supabase) {
+    throw new Error('La creación de cuenta todavía no está disponible.')
+  }
+
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${window.location.origin}/login`,
+      data: {
+        full_name: fullName,
+      },
+    },
+  })
+
+  if (error) {
+    throw error
+  }
 }
 
 export async function signOut() {
@@ -50,6 +86,7 @@ export async function getCurrentUserProfile(): Promise<UserProfile | null> {
     email: data.user.email ?? '',
     fullName: data.user.user_metadata.full_name ?? 'Comunidad Vida Mascotera',
     avatarUrl: data.user.user_metadata.avatar_url,
+    role: 'reader',
   }
 
   const profileResult = await supabase.from('profiles').select('*').eq('id', data.user.id).maybeSingle<SupabaseProfileDTO>()

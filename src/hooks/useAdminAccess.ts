@@ -1,38 +1,27 @@
-import { useEffect, useState } from 'react'
-import { isSupabaseConfigured } from '@/lib/supabase'
-import { getCurrentUserProfile, signInWithMagicLink } from '@/services/auth-service'
+import { useMemo } from 'react'
+import { useAuth } from '@/providers/AuthProvider'
 import type { UserProfile } from '@/types/content'
 
-type AccessState = 'loading' | 'login' | 'forbidden' | 'granted' | 'unavailable'
+type AccessState = 'loading' | 'forbidden' | 'granted' | 'unavailable'
 
 export function useAdminAccess() {
-  const [state, setState] = useState<AccessState>('loading')
-  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const { status, profile } = useAuth()
 
-  useEffect(() => {
-    if (!isSupabaseConfigured) {
-      setState('unavailable')
-      return
+  const state = useMemo<AccessState>(() => {
+    if (status === 'loading') {
+      return 'loading'
     }
 
-    void getCurrentUserProfile()
-      .then((currentProfile) => {
-        if (!currentProfile) {
-          setState('login')
-          return
-        }
+    if (status === 'unavailable') {
+      return 'unavailable'
+    }
 
-        setProfile(currentProfile)
-        setState(currentProfile.role === 'admin' ? 'granted' : 'forbidden')
-      })
-      .catch(() => {
-        setState('unavailable')
-      })
-  }, [])
+    if (profile?.role === 'admin') {
+      return 'granted'
+    }
 
-  async function requestAccess(email: string) {
-    await signInWithMagicLink(email)
-  }
+    return 'forbidden'
+  }, [profile?.role, status])
 
-  return { state, profile, requestAccess }
+  return { state, profile: profile as UserProfile | null }
 }

@@ -1,46 +1,15 @@
-import { useState } from 'react'
 import { FilePenLine, LogOut, Plus, ShieldCheck } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
-import { StatusBanner } from '@/components/common/StatusBanner'
 import { useAdminAccess } from '@/hooks/useAdminAccess'
-import { signOut } from '@/services/auth-service'
+import { useAuth } from '@/providers/AuthProvider'
 
-function AdminAccessScreen({
-  mode,
-  onSubmit,
-}: {
-  mode: 'login' | 'forbidden' | 'unavailable' | 'loading'
-  onSubmit: (email: string) => Promise<void>
-}) {
-  const [email, setEmail] = useState('')
-  const [sending, setSending] = useState(false)
-  const [feedback, setFeedback] = useState<string | null>(null)
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setSending(true)
-    setFeedback(null)
-
-    try {
-      await onSubmit(email)
-      setFeedback('Te enviamos un enlace de acceso a tu correo.')
-    } catch {
-      setFeedback('No pudimos enviar el acceso ahora mismo.')
-    } finally {
-      setSending(false)
-    }
-  }
-
+function AdminAccessScreen({ mode }: { mode: 'forbidden' | 'unavailable' | 'loading' }) {
   const content = {
     loading: {
       title: 'Comprobando acceso',
       description: 'Estamos validando tu sesión y permisos para entrar al panel editorial.',
-    },
-    login: {
-      title: 'Acceso al panel editorial',
-      description: 'Entra con tu correo para acceder a la gestión privada de contenido.',
     },
     forbidden: {
       title: 'Sin permisos de administración',
@@ -63,28 +32,12 @@ function AdminAccessScreen({
         <h1 className="mt-5 text-4xl font-semibold tracking-tight text-slate-900">{content.title}</h1>
         <p className="mt-4 text-base leading-8 text-slate-600">{content.description}</p>
 
-        {mode === 'login' ? (
-          <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
-            <label className="block text-sm font-medium text-slate-700" htmlFor="admin-email">
-              Correo de acceso
-            </label>
-            <input
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-              id="admin-email"
-              onChange={(event) => setEmail(event.target.value)}
-              type="email"
-              value={email}
-            />
-            <Button disabled={sending || !email} type="submit">
-              {sending ? 'Enviando acceso...' : 'Recibir enlace mágico'}
-            </Button>
-            {feedback ? <StatusBanner message={feedback} tone="info" /> : null}
-          </form>
-        ) : null}
-
         {mode === 'forbidden' ? (
           <div className="mt-8 flex gap-3">
             <Button to="/">Volver al sitio</Button>
+            <Button to="/login" variant="secondary">
+              Cambiar de cuenta
+            </Button>
           </div>
         ) : null}
       </div>
@@ -93,10 +46,11 @@ function AdminAccessScreen({
 }
 
 export function AdminLayout() {
-  const { state, profile, requestAccess } = useAdminAccess()
+  const { state, profile } = useAdminAccess()
+  const { signOut } = useAuth()
 
-  if (state === 'loading' || state === 'login' || state === 'forbidden' || state === 'unavailable') {
-    return <AdminAccessScreen mode={state} onSubmit={requestAccess} />
+  if (state === 'loading' || state === 'forbidden' || state === 'unavailable') {
+    return <AdminAccessScreen mode={state} />
   }
 
   return (
@@ -138,12 +92,7 @@ export function AdminLayout() {
               <div className="hidden rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600 sm:block">
                 {profile?.fullName ?? 'Administrador'}
               </div>
-              <Button
-                onClick={() => {
-                  void signOut().then(() => window.location.reload())
-                }}
-                variant="secondary"
-              >
+              <Button onClick={() => void signOut()} variant="secondary">
                 <LogOut className="mr-2 h-4 w-4" />
                 Salir
               </Button>

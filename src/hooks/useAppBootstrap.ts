@@ -1,6 +1,5 @@
 import { useEffect, useState, useEffectEvent } from 'react'
 import { getFavorites, getStoredPreferences } from '@/lib/indexed-db'
-import { isSupabaseConfigured, supabase } from '@/lib/supabase'
 import { getArticles, getProducts } from '@/services/content-service'
 import { persistFavoriteIds, persistPreferences, syncPendingChanges } from '@/services/offline-sync-service'
 import { useAppStore } from '@/store/app-store'
@@ -16,7 +15,6 @@ export function useAppBootstrap() {
   const preferences = useAppStore((state) => state.preferences)
   const hydrated = useAppStore((state) => state.hydrated)
   const setOffline = useAppStore((state) => state.setOffline)
-  const setProfile = useAppStore((state) => state.setProfile)
   const setFavorites = useAppStore((state) => state.setFavorites)
   const setPreferences = useAppStore((state) => state.setPreferences)
 
@@ -94,30 +92,6 @@ export function useAppBootstrap() {
       window.removeEventListener('offline', handleConnectivity)
     }
   }, [handleConnectivity])
-
-  useEffect(() => {
-    if (!isSupabaseConfigured || !supabase) {
-      return
-    }
-
-    void supabase.auth
-      .getUser()
-      .then(({ data }) => {
-        if (!data.user) {
-          return
-        }
-
-        setProfile({
-          id: data.user.id,
-          email: data.user.email ?? '',
-          fullName: data.user.user_metadata.full_name ?? 'Comunidad Vida Mascotera',
-          avatarUrl: data.user.user_metadata.avatar_url,
-        })
-      })
-      .catch(() => {
-        setError((current) => current ?? 'Hubo un detalle al recuperar tu perfil, pero puedes seguir explorando.')
-      })
-  }, [setProfile])
 
   return { articles, products, loading, error }
 }

@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { AdminLayout } from '@/layouts/AdminLayout'
 import { MainLayout } from '@/layouts/MainLayout'
+import { LoginPage } from '@/pages/LoginPage'
 import { AdminArticleEditorPage } from '@/pages/admin/AdminArticleEditorPage'
 import { AdminArticlesPage } from '@/pages/admin/AdminArticlesPage'
 import { RouteErrorPage } from '@/pages/RouteErrorPage'
+import { AccessDeniedPage, RequireRole } from '@/routes/guards'
 import { ShellPage } from '@/routes/shell-page'
 
 export const router = createBrowserRouter([
@@ -28,14 +30,29 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/admin',
-    element: <AdminLayout />,
+    path: '/login',
+    element: <LoginPage />,
+    errorElement: <RouteErrorPage />,
+  },
+  {
+    path: '/acceso-denegado',
+    element: <AccessDeniedPage />,
+    errorElement: <RouteErrorPage />,
+  },
+  {
+    element: <RequireRole allowedRoles={['admin']} />,
     errorElement: <RouteErrorPage />,
     children: [
-      { index: true, element: <Navigate replace to="/admin/articulos" /> },
-      { path: 'articulos', element: <AdminArticlesPage /> },
-      { path: 'articulos/nuevo', element: <AdminArticleEditorPage /> },
-      { path: 'articulos/editar/:id', element: <AdminArticleEditorPage /> },
+      {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+          { index: true, element: <Navigate replace to="/admin/articulos" /> },
+          { path: 'articulos', element: <AdminArticlesPage /> },
+          { path: 'articulos/nuevo', element: <AdminArticleEditorPage /> },
+          { path: 'articulos/editar/:id', element: <AdminArticleEditorPage /> },
+        ],
+      },
     ],
   },
 ])
