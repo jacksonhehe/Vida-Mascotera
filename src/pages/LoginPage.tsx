@@ -10,6 +10,32 @@ import type { UserRole } from '@/types/content'
 type AuthMode = 'signin' | 'signup'
 type FeedbackTone = 'info' | 'warning'
 
+function getFriendlyAuthError(error: unknown, mode: AuthMode) {
+  const message = error instanceof Error ? error.message.toLowerCase() : ''
+
+  if (message.includes('invalid login credentials')) {
+    return 'No encontramos una cuenta con ese correo y contraseña. Revisa tus datos o crea tu cuenta.'
+  }
+
+  if (message.includes('email not confirmed')) {
+    return 'Revisa tu correo electrónico antes de volver a intentarlo.'
+  }
+
+  if (message.includes('user already registered')) {
+    return 'Ese correo ya tiene una cuenta. Prueba iniciando sesión.'
+  }
+
+  if (message.includes('password should be at least')) {
+    return 'La contraseña debe tener al menos 6 caracteres.'
+  }
+
+  if (mode === 'signin') {
+    return 'No pudimos iniciar tu sesión. Revisa tu correo y contraseña.'
+  }
+
+  return 'No pudimos crear tu cuenta ahora mismo. Verifica los datos e inténtalo otra vez.'
+}
+
 function resolveRedirectPath(role: UserRole | null, fallbackPath: string | null) {
   if (fallbackPath && fallbackPath.startsWith('/')) {
     return fallbackPath
@@ -29,14 +55,13 @@ function resolveRedirectPath(role: UserRole | null, fallbackPath: string | null)
 export function LoginPage() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { status, profile, role, signIn, signUp, sendMagicLink, isAuthenticated } = useAuth()
+  const { status, profile, role, signIn, signUp, isAuthenticated } = useAuth()
   const [mode, setMode] = useState<AuthMode>('signin')
   const [fullName, setFullName] = useState(profile?.fullName ?? '')
   const [email, setEmail] = useState(profile?.email ?? '')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const [sendingMagicLink, setSendingMagicLink] = useState(false)
   const [feedback, setFeedback] = useState<{ tone: FeedbackTone; message: string } | null>(null)
 
   const nextPath = useMemo(() => new URLSearchParams(location.search).get('next'), [location.search])
@@ -97,41 +122,13 @@ export function LoginPage() {
           message: 'Tu cuenta fue creada. Si hace falta confirmar el correo, te enviaremos un mensaje para completar el acceso.',
         })
       }
-    } catch {
+    } catch (error) {
       setFeedback({
         tone: 'warning',
-        message:
-          mode === 'signin'
-            ? 'No pudimos iniciar tu sesión. Revisa tu correo y contraseña.'
-            : 'No pudimos crear tu cuenta ahora mismo. Verifica los datos e inténtalo otra vez.',
+        message: getFriendlyAuthError(error, mode),
       })
     } finally {
       setSubmitting(false)
-    }
-  }
-
-  async function handleMagicLink() {
-    if (!email.trim()) {
-      setFeedback({ tone: 'warning', message: 'Escribe tu correo para enviarte el enlace.' })
-      return
-    }
-
-    setFeedback(null)
-    setSendingMagicLink(true)
-
-    try {
-      await sendMagicLink(email)
-      setFeedback({
-        tone: 'info',
-        message: 'Te enviamos un enlace de acceso a tu correo. Ábrelo en este mismo dispositivo para entrar.',
-      })
-    } catch {
-      setFeedback({
-        tone: 'warning',
-        message: 'No pudimos enviarte el enlace ahora mismo. Inténtalo de nuevo en unos minutos.',
-      })
-    } finally {
-      setSendingMagicLink(false)
     }
   }
 
@@ -159,7 +156,7 @@ export function LoginPage() {
             {[
               'Acceso sencillo con correo y contraseña.',
               'Creación de cuenta en pocos pasos.',
-              'Enlace de acceso por correo si lo prefieres.',
+              'Tus contenidos y preferencias siempre a mano.',
               'Tu experiencia disponible cuando vuelvas.',
             ].map((item) => (
               <div className="rounded-[1.75rem] border border-white/15 bg-white/10 p-5" key={item}>
@@ -196,7 +193,7 @@ export function LoginPage() {
           </h2>
           <p className="mt-4 text-base leading-8 text-slate-600">
             {mode === 'signin'
-              ? 'Accede con tu correo y contraseña. Si lo prefieres, también puedes pedir un enlace de acceso.'
+              ? 'Accede con tu correo y contraseña para volver a tu cuenta.'
               : 'Completa tus datos para empezar a guardar tus preferencias y seguir tu contenido favorito.'}
           </p>
 
@@ -283,21 +280,6 @@ export function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-slate-200" />
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">o</span>
-            <div className="h-px flex-1 bg-slate-200" />
-          </div>
-
-          <Button
-            className="mt-5 w-full"
-            disabled={sendingMagicLink || !email || status === 'unavailable'}
-            onClick={() => void handleMagicLink()}
-            variant="secondary"
-          >
-            {sendingMagicLink ? 'Enviando enlace...' : 'Entrar con enlace por correo'}
-          </Button>
-
           {feedback ? (
             <div className="mt-5">
               <StatusBanner message={feedback.message} tone={feedback.tone} />
@@ -310,7 +292,7 @@ export function LoginPage() {
               <div>
                 <p className="text-sm font-semibold text-slate-900">Acceso seguro y simple</p>
                 <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Elige la forma de entrar que te resulte más cómoda y sigue disfrutando de Vida Mascotera.
+                  Entra con tus datos y sigue disfrutando de Vida Mascotera.
                 </p>
               </div>
             </div>

@@ -3,7 +3,6 @@ import type { Session } from '@supabase/supabase-js'
 import { isSupabaseConfigured, supabase } from '@/lib/supabase'
 import {
   getCurrentUserProfile,
-  signInWithMagicLink,
   signInWithPassword,
   signOut as signOutService,
   signUpWithPassword,
@@ -20,7 +19,6 @@ interface AuthContextValue {
   isAuthenticated: boolean
   signIn: (email: string, password: string) => Promise<void>
   signUp: (payload: { fullName: string; email: string; password: string }) => Promise<void>
-  sendMagicLink: (email: string) => Promise<void>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<UserProfile | null>
 }
@@ -108,9 +106,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       signUp: async ({ fullName, email, password }) => {
         await signUpWithPassword(email, password, fullName)
-      },
-      sendMagicLink: async (email: string) => {
-        await signInWithMagicLink(email)
       },
       signOut: async () => {
         await signOutService()
