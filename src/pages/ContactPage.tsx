@@ -25,11 +25,11 @@ function validate(form: ContactMessageInput) {
   }
 
   if (form.subject.trim().length < 4) {
-    errors.subject = 'Cuentanos un asunto un poco mas claro.'
+    errors.subject = 'Cuéntanos un asunto un poco más claro.'
   }
 
   if (form.message.trim().length < 20) {
-    errors.message = 'Tu mensaje necesita un poco mas de contexto para ayudarte bien.'
+    errors.message = 'Tu mensaje necesita un poco más de contexto para ayudarte bien.'
   }
 
   return errors
@@ -58,14 +58,14 @@ export function ContactPage() {
       setFeedback({
         tone: result.queued ? 'warning' : 'success',
         message: result.queued
-          ? 'Recibimos tu mensaje y lo enviaremos en cuanto tengamos una mejor conexion.'
+          ? 'Recibimos tu mensaje y lo enviaremos en cuanto tengamos una mejor conexión.'
           : 'Tu mensaje ya fue enviado. Gracias por escribirnos.',
       })
       setForm(initialForm)
     } catch {
       setFeedback({
         tone: 'warning',
-        message: 'No pudimos enviar tu mensaje ahora mismo. Intentalo otra vez en unos minutos.',
+        message: 'No pudimos enviar tu mensaje ahora mismo. Inténtalo otra vez en unos minutos.',
       })
     } finally {
       setSubmitting(false)
@@ -84,7 +84,7 @@ export function ContactPage() {
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-100">Contacto</p>
         <h1 className="mt-4 text-4xl font-semibold">Conversemos sobre contenido, colaboraciones y nuevas ideas para el universo pet.</h1>
         <p className="mt-4 max-w-xl text-sm leading-7 text-brand-100/85">
-          Si quieres proponer una alianza, una campana, un proyecto editorial o simplemente escribirnos, este es el punto de partida.
+          Si quieres proponer una alianza, una campaña, un proyecto editorial o simplemente escribirnos, este es el punto de partida.
         </p>
         <div className="mt-8 space-y-4 text-sm">
           <div className="flex items-center gap-3">
@@ -93,7 +93,7 @@ export function ContactPage() {
           </div>
           <div className="flex items-center gap-3">
             <MapPin size={18} />
-            Atencion remota para marcas, medios y proyectos digitales de LATAM.
+            Atención remota para marcas, medios y proyectos digitales de LATAM.
           </div>
           <div className="flex items-center gap-3">
             <Sparkles size={18} />
@@ -105,10 +105,10 @@ export function ContactPage() {
       <section className="rounded-[2.5rem] bg-white p-8 shadow-soft md:p-10">
         <form className="space-y-5" noValidate onSubmit={handleSubmit}>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-coral-600">Escribenos</p>
-            <h2 className="mt-3 text-3xl font-semibold text-slate-900">Cuentanos como podemos ayudarte</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-coral-600">Escríbenos</p>
+            <h2 className="mt-3 text-3xl font-semibold text-slate-900">Cuéntanos cómo podemos ayudarte</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
-              Si quieres escribirnos por una colaboracion, una consulta o una idea, este es el mejor lugar para empezar.
+              Si quieres escribirnos por una colaboración, una consulta o una idea, este es el mejor lugar para empezar.
             </p>
           </div>
 

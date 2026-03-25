@@ -27,24 +27,24 @@ export function HomePage({ articles, products }: HomePageProps) {
       <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="rounded-[2rem] bg-white p-8 shadow-soft">
           <SectionHeading
-            description="Creamos contenido para resolver dudas reales sobre bienestar, rutina, hogar y decisiones de compra sin sonar frio ni excesivamente tecnico."
+            description="Creamos contenido para resolver dudas reales sobre bienestar, rutina, hogar y decisiones de compra sin sonar frío ni excesivamente técnico."
             eyebrow="Nuestra propuesta"
-            title="Una experiencia pensada para acompanarte antes, durante y despues de cada decision."
+            title="Una experiencia pensada para acompañarte antes, durante y después de cada decisión."
           />
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
               {
                 title: 'Confianza editorial',
-                body: 'Guias claras y cercanas para entender mejor a tu mascota y actuar con mas seguridad.',
+                body: 'Guías claras y cercanas para entender mejor a tu mascota y actuar con más seguridad.',
                 Icon: ShieldCheck,
               },
               {
                 title: 'Recomendaciones honestas',
-                body: 'Comparativas y selecciones utiles para invertir en productos que si valen la pena.',
+                body: 'Comparativas y selecciones útiles para invertir en productos que sí valen la pena.',
                 Icon: Star,
               },
               {
-                title: 'Acompanamiento cotidiano',
+                title: 'Acompañamiento cotidiano',
                 body: 'Contenido pensado para la vida diaria, no solo para momentos puntuales.',
                 Icon: HeartHandshake,
               },
@@ -79,7 +79,7 @@ export function HomePage({ articles, products }: HomePageProps) {
 
       <section className="space-y-6">
         <SectionHeading
-          description="Desde la convivencia cotidiana hasta la nutricion y las compras mejor pensadas, organizamos el contenido para que encuentres ayuda rapido."
+          description="Desde la convivencia cotidiana hasta la nutrición y las compras mejor pensadas, organizamos el contenido para que encuentres ayuda rápido."
           eyebrow="Explora por temas"
           title="Grandes pilares para cuidar mejor a tu mascota."
         />
@@ -92,9 +92,9 @@ export function HomePage({ articles, products }: HomePageProps) {
 
       <section className="space-y-6">
         <SectionHeading
-          description="Lecturas nuevas y relevantes para tutores que quieren respuestas claras, accionables y con una sensibilidad mas humana."
+          description="Lecturas nuevas y relevantes para tutores que quieren respuestas claras, accionables y con una sensibilidad más humana."
           eyebrow="Lecturas recientes"
-          title="Articulos para vivir con mas calma, criterio y conexion."
+          title="Artículos para vivir con más calma, criterio y conexión."
         />
         <div className="grid gap-6 lg:grid-cols-3">
           {recentArticles.map((article) => (
@@ -107,7 +107,7 @@ export function HomePage({ articles, products }: HomePageProps) {
         <SectionHeading
           description="Selecciones editoriales preparadas para crecer hacia una capa comercial real, sin perder confianza ni utilidad."
           eyebrow="Recomendaciones"
-          title="Productos elegidos con intencion, contexto y criterio."
+          title="Productos elegidos con intención, contexto y criterio."
         />
         <div className="grid gap-6 lg:grid-cols-4">
           {products.map((product) => (
@@ -119,9 +119,9 @@ export function HomePage({ articles, products }: HomePageProps) {
       <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="rounded-[2rem] bg-white p-8 shadow-soft">
           <SectionHeading
-            description="Pequenos pasos que ayudan mucho cuando una mascota llega por primera vez a casa o cuando quieres ordenar mejor la convivencia."
+            description="Pequeños pasos que ayudan mucho cuando una mascota llega por primera vez a casa o cuando quieres ordenar mejor la convivencia."
             eyebrow="Primeros pasos"
-            title="Tres habitos simples que te ahorran estres desde el inicio."
+            title="Tres hábitos simples que te ahorran estrés desde el inicio."
           />
           <div className="mt-8 grid gap-4">
             {starterTips.map((tip) => (
@@ -134,10 +134,10 @@ export function HomePage({ articles, products }: HomePageProps) {
         </div>
 
         <div className="rounded-[2rem] bg-[#1f4d47] p-8 text-white shadow-soft">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-mint-100">Comparativas utiles</p>
-          <h3 className="mt-4 text-3xl font-semibold">Compra con mas claridad y menos impulso.</h3>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-mint-100">Comparativas útiles</p>
+          <h3 className="mt-4 text-3xl font-semibold">Compra con más claridad y menos impulso.</h3>
           <p className="mt-4 text-base leading-8 text-mint-50/90">
-            Analizamos escenarios reales, pros, limites y senales para que puedas elegir mejor entre opciones parecidas sin perder tiempo.
+            Analizamos escenarios reales, pros, límites y señales para que puedas elegir mejor entre opciones parecidas sin perder tiempo.
           </p>
           <Link className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white" to="/comparativas">
             Ver comparativas

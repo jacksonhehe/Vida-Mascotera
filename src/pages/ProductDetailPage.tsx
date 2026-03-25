@@ -1,9 +1,9 @@
 import { ArrowRight, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { ProductCard } from '@/components/cards/ProductCard'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
-import { ProductCard } from '@/components/cards/ProductCard'
 import type { ProductRecommendation } from '@/types/content'
 
 interface ProductDetailPageProps {
@@ -48,7 +48,7 @@ export function ProductDetailPage({ product, relatedProducts }: ProductDetailPag
               <p className="text-lg leading-8 text-slate-600">{product.longDescription}</p>
             </header>
             <div className="rounded-[1.75rem] bg-cream-50 p-5">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Cuando tiene mas sentido</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Cuándo tiene más sentido</p>
               <ul className="mt-4 space-y-2 text-sm leading-7 text-slate-700">
                 {product.useCases.map((useCase) => (
                   <li key={useCase}>{useCase}</li>
@@ -69,7 +69,7 @@ export function ProductDetailPage({ product, relatedProducts }: ProductDetailPag
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-coral-600">Seguir explorando</p>
-              <h2 className="mt-2 text-3xl font-semibold text-slate-900">Otras recomendaciones de la misma linea</h2>
+              <h2 className="mt-2 text-3xl font-semibold text-slate-900">Otras recomendaciones de la misma línea</h2>
             </div>
             <Link className="inline-flex items-center gap-2 text-sm font-semibold text-brand-800" to="/accesorios">
               Volver a accesorios

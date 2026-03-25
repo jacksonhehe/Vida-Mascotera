@@ -1,5 +1,8 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { AdminLayout } from '@/layouts/AdminLayout'
 import { MainLayout } from '@/layouts/MainLayout'
+import { AdminArticleEditorPage } from '@/pages/admin/AdminArticleEditorPage'
+import { AdminArticlesPage } from '@/pages/admin/AdminArticlesPage'
 import { RouteErrorPage } from '@/pages/RouteErrorPage'
 import { ShellPage } from '@/routes/shell-page'
 
@@ -22,6 +25,17 @@ export const router = createBrowserRouter([
       { path: 'recomendaciones/:slug', element: <ShellPage page="product-detail" /> },
       { path: 'contacto', element: <ShellPage page="contacto" /> },
       { path: '*', element: <ShellPage page="404" /> },
+    ],
+  },
+  {
+    path: '/admin',
+    element: <AdminLayout />,
+    errorElement: <RouteErrorPage />,
+    children: [
+      { index: true, element: <Navigate replace to="/admin/articulos" /> },
+      { path: 'articulos', element: <AdminArticlesPage /> },
+      { path: 'articulos/nuevo', element: <AdminArticleEditorPage /> },
+      { path: 'articulos/editar/:id', element: <AdminArticleEditorPage /> },
     ],
   },
 ])

@@ -12,26 +12,26 @@ export function NewsletterCard() {
             Novedades con criterio, no spam
           </div>
           <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">
-            Recibe ideas utiles, comparativas honestas y recomendaciones pensadas para la vida real con tu mascota.
+            Recibe ideas útiles, comparativas honestas y recomendaciones pensadas para la vida real con tu mascota.
           </h2>
           <p className="max-w-2xl text-base leading-8 text-brand-50/90">
-            Cada envio esta pensado para acompanarte con contenido practico, inspiracion y selecciones editoriales que si te ayudan a decidir mejor.
+            Cada envío está pensado para acompañarte con contenido práctico, inspiración y selecciones editoriales que sí te ayudan a decidir mejor.
           </p>
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-brand-50">
             <Sparkles className="h-4 w-4" />
-            Novedades pensadas para tu dia a dia con tu mascota
+            Novedades pensadas para tu día a día con tu mascota
           </div>
         </div>
         <div className="rounded-[1.75rem] bg-white p-5 text-slate-900">
           <div className="space-y-3">
             <input
               className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400"
-              placeholder="Tu correo electronico"
+              placeholder="Tu correo electrónico"
               type="email"
             />
             <Button className="w-full">Quiero recibir novedades</Button>
             <p className="text-xs leading-6 text-slate-500">
-              Solo contenido valioso sobre bienestar, hogar, compras mas inteligentes y nuevas guias de Vida Mascotera.
+              Solo contenido valioso sobre bienestar, hogar, compras más inteligentes y nuevas guías de Vida Mascotera.
             </p>
           </div>
         </div>

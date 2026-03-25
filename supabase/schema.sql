@@ -26,7 +26,17 @@ create table if not exists public.articles (
   seo_title text,
   seo_description text,
   comparison_table jsonb,
+  status text not null default 'draft',
   created_at timestamptz not null default now()
+);
+
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  avatar_url text,
+  role text not null default 'reader',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
 create table if not exists public.products (
@@ -74,7 +84,9 @@ create table if not exists public.user_preferences (
   updated_at timestamptz not null default now()
 );
 
+alter table public.articles enable row level security;
 alter table public.contact_messages enable row level security;
+alter table public.profiles enable row level security;
 alter table public.user_favorites enable row level security;
 alter table public.user_preferences enable row level security;
 
@@ -83,6 +95,56 @@ on public.contact_messages
 for insert
 to authenticated, anon
 with check (true);
+
+create policy "profiles_select_own"
+on public.profiles
+for select
+to authenticated
+using (auth.uid() = id);
+
+create policy "profiles_admin_read_all"
+on public.profiles
+for select
+to authenticated
+using (
+  exists (
+    select 1
+    from public.profiles as viewer
+    where viewer.id = auth.uid()
+      and viewer.role = 'admin'
+  )
+);
+
+create policy "articles_public_read_published"
+on public.articles
+for select
+to anon, authenticated
+using (status = 'published');
+
+create policy "articles_admin_manage"
+on public.articles
+for all
+to authenticated
+using (
+  exists (
+    select 1
+    from public.profiles as viewer
+    where viewer.id = auth.uid()
+      and viewer.role = 'admin'
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.profiles as viewer
+    where viewer.id = auth.uid()
+      and viewer.role = 'admin'
+  )
+);
+
+-- Bucket expected by the admin panel:
+-- insert into storage.buckets (id, name, public) values ('article-images', 'article-images', true);
+-- Storage policies should allow admin users to upload/update files inside article-images.
 
 create policy "user_favorites_manage_own"
 on public.user_favorites

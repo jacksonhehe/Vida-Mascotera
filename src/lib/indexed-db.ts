@@ -1,8 +1,15 @@
 import { openDB } from 'idb'
-import type { Article, ContactMessageRecord, ProductRecommendation, SyncQueueItem, UserPreferences } from '@/types/content'
+import type {
+  Article,
+  ArticleEditorDraft,
+  ContactMessageRecord,
+  ProductRecommendation,
+  SyncQueueItem,
+  UserPreferences,
+} from '@/types/content'
 
 const DB_NAME = 'vida-mascotera-db'
-const DB_VERSION = 3
+const DB_VERSION = 4
 
 export const dbPromise = openDB(DB_NAME, DB_VERSION, {
   upgrade(db, oldVersion) {
@@ -43,6 +50,12 @@ export const dbPromise = openDB(DB_NAME, DB_VERSION, {
 
       db.createObjectStore('content', { keyPath: 'id' })
       db.createObjectStore('products', { keyPath: 'id' })
+    }
+
+    if (oldVersion < 4) {
+      if (!db.objectStoreNames.contains('articleDrafts')) {
+        db.createObjectStore('articleDrafts', { keyPath: 'id' })
+      }
     }
   },
 })
@@ -110,6 +123,21 @@ export async function getStoredPreferences(): Promise<UserPreferences | null> {
 export async function saveContactMessage(message: ContactMessageRecord) {
   const db = await dbPromise
   await db.put('contactMessages', message)
+}
+
+export async function saveArticleDraft(draft: ArticleEditorDraft) {
+  const db = await dbPromise
+  await db.put('articleDrafts', draft)
+}
+
+export async function getArticleDraft(id: string): Promise<ArticleEditorDraft | null> {
+  const db = await dbPromise
+  return (await db.get('articleDrafts', id)) ?? null
+}
+
+export async function deleteArticleDraft(id: string) {
+  const db = await dbPromise
+  await db.delete('articleDrafts', id)
 }
 
 export async function getContactMessages(): Promise<ContactMessageRecord[]> {

@@ -9,6 +9,9 @@ export type PetCategory =
   | 'blog'
   | 'contacto'
 
+export type ArticleStatus = 'draft' | 'published' | 'archived'
+export type UserRole = 'admin' | 'editor' | 'reader'
+
 export interface NavItem {
   label: string
   path: string
@@ -72,6 +75,7 @@ export interface Article {
   seoTitle: string
   seoDescription: string
   comparisonTable?: ComparisonTable
+  status?: ArticleStatus
 }
 
 export interface ProductRecommendation {
@@ -110,6 +114,7 @@ export interface UserProfile {
   fullName: string
   city?: string
   avatarUrl?: string
+  role?: UserRole
 }
 
 export interface SyncQueueItem {
@@ -132,6 +137,39 @@ export interface ContactMessageRecord extends ContactMessageInput {
   status: 'pending' | 'sent'
 }
 
+export interface ArticleEditorDraft {
+  id: string
+  articleId?: string
+  data: Article
+  updatedAt: string
+}
+
+export interface AdminArticleFilters {
+  search: string
+  category: PetCategory | 'todas'
+  status: ArticleStatus | 'todos'
+  month: string
+}
+
+export interface ArticleUpsertInput {
+  id?: string
+  title: string
+  slug: string
+  excerpt: string
+  category: PetCategory
+  author: string
+  image: string
+  tags: string[]
+  heroNote: string
+  takeaways: string[]
+  body: ArticleSection[]
+  seoTitle: string
+  seoDescription: string
+  publishedAt: string
+  updatedAt: string
+  status: ArticleStatus
+}
+
 export interface SupabaseArticleDTO {
   id: string
   slug: string | null
@@ -152,6 +190,7 @@ export interface SupabaseArticleDTO {
   seo_title?: string | null
   seo_description?: string | null
   comparison_table?: ComparisonTable | null
+  status?: ArticleStatus | null
 }
 
 export interface SupabaseProductDTO {
@@ -170,4 +209,11 @@ export interface SupabaseProductDTO {
   cta_label?: string | null
   seo_title?: string | null
   seo_description?: string | null
+}
+
+export interface SupabaseProfileDTO {
+  id: string
+  full_name?: string | null
+  avatar_url?: string | null
+  role?: UserRole | null
 }

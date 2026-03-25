@@ -47,7 +47,7 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
                 className="rounded-full bg-brand-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-800"
                 to={detailPath}
               >
-                {article.category === 'comparativas' ? 'Comparativa editorial' : 'Articulo recomendado'}
+                {article.category === 'comparativas' ? 'Comparativa editorial' : 'Artículo recomendado'}
               </Link>
               <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600">
                 <Clock3 className="h-4 w-4" />
@@ -73,7 +73,7 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
           <div className="relative min-h-[320px]">
             <img alt={article.title} className="h-full w-full object-cover" src={article.image} />
             <div className="absolute inset-x-6 bottom-6 rounded-[1.75rem] bg-slate-950/75 p-5 text-white backdrop-blur">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Resumen rapido</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Resumen rápido</p>
               <ul className="mt-3 space-y-2 text-sm leading-6 text-white/90">
                 {article.takeaways.map((takeaway) => (
                   <li className="flex gap-3" key={takeaway}>
@@ -110,7 +110,7 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
                       <th className="px-4">Criterio</th>
                       <th className="px-4">{article.comparisonTable.optionALabel}</th>
                       <th className="px-4">{article.comparisonTable.optionBLabel}</th>
-                      <th className="px-4">Que conviene mirar</th>
+                      <th className="px-4">Qué conviene mirar</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -135,12 +135,12 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
               <Heart className="h-4 w-4" />
               Vida Mascotera recomienda
             </div>
-            <h2 className="mt-5 text-2xl font-semibold">Una lectura util debe ayudarte a actuar mejor, no solo a leer mas.</h2>
+            <h2 className="mt-5 text-2xl font-semibold">Una lectura útil debe ayudarte a actuar mejor, no solo a leer más.</h2>
             <p className="mt-4 text-sm leading-7 text-brand-50/90">
-              Creamos guias, comparativas y recomendaciones con foco en bienestar, claridad y decisiones realistas para la vida diaria.
+              Creamos guías, comparativas y recomendaciones con foco en bienestar, claridad y decisiones realistas para la vida diaria.
             </p>
             <Button className="mt-6 w-full" to="/contacto" variant="secondary">
-              Consultar una colaboracion
+              Consultar una colaboración
             </Button>
           </div>
 

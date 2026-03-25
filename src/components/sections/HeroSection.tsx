@@ -3,9 +3,9 @@ import { Button } from '@/components/common/Button'
 
 export function HeroSection() {
   const featureItems = [
-    { label: 'Guias claras para el dia a dia', Icon: ShieldCheck },
+    { label: 'Guías claras para el día a día', Icon: ShieldCheck },
     { label: 'Recomendaciones con criterio editorial', Icon: HeartHandshake },
-    { label: 'Ideas utiles para cuidar con mas calma', Icon: Sparkles },
+    { label: 'Ideas útiles para cuidar con más calma', Icon: Sparkles },
   ]
 
   return (
@@ -18,10 +18,10 @@ export function HeroSection() {
               Una marca editorial para cuidar mejor a perros y gatos
             </p>
             <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-900 md:text-6xl">
-              Consejos utiles, comparativas honestas y recomendaciones que si encajan con la vida real.
+              Consejos útiles, comparativas honestas y recomendaciones que sí encajan con la vida real.
             </h1>
             <p className="max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-              Vida Mascotera reune contenido calido, confiable y bien aterrizado para acompanarte en el bienestar, la convivencia y las decisiones de compra de tu mascota.
+              Vida Mascotera reúne contenido cálido, confiable y bien aterrizado para acompañarte en el bienestar, la convivencia y las decisiones de compra de tu mascota.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -42,8 +42,8 @@ export function HeroSection() {
 
         <div className="grid gap-4">
           <div className="rounded-[2rem] bg-brand-900 p-6 text-white">
-            <p className="text-sm uppercase tracking-[0.24em] text-brand-100">Lo mas valioso</p>
-            <p className="mt-4 text-3xl font-semibold">Orientacion confiable para que cada decision se sienta mas simple.</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-brand-100">Lo más valioso</p>
+            <p className="mt-4 text-3xl font-semibold">Orientación confiable para que cada decisión se sienta más simple.</p>
             <p className="mt-3 text-sm leading-7 text-brand-100/85">
               Desde rutinas cotidianas hasta compras comparadas con criterio, construimos una experiencia pensada para personas que aman a sus mascotas y quieren hacerlo bien.
             </p>
