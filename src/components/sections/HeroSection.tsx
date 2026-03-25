@@ -1,12 +1,11 @@
 import { HeartHandshake, ShieldCheck, Sparkles } from 'lucide-react'
 import { Button } from '@/components/common/Button'
-import { OfflineStatus } from '@/components/common/OfflineStatus'
 
 export function HeroSection() {
   const featureItems = [
-    { label: 'Guías claras para el día a día', Icon: ShieldCheck },
+    { label: 'Guias claras para el dia a dia', Icon: ShieldCheck },
     { label: 'Recomendaciones con criterio editorial', Icon: HeartHandshake },
-    { label: 'Favoritos y lectura disponible offline', Icon: Sparkles },
+    { label: 'Ideas utiles para cuidar con mas calma', Icon: Sparkles },
   ]
 
   return (
@@ -14,16 +13,15 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-hero-glow opacity-90" />
       <div className="relative grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         <div className="space-y-6">
-          <OfflineStatus />
           <div className="space-y-5">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-700">
               Una marca editorial para cuidar mejor a perros y gatos
             </p>
             <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-900 md:text-6xl">
-              Consejos útiles, comparativas honestas y recomendaciones que sí encajan con la vida real.
+              Consejos utiles, comparativas honestas y recomendaciones que si encajan con la vida real.
             </h1>
             <p className="max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-              Vida Mascotera reúne contenido cálido, confiable y bien aterrizado para acompañarte en el bienestar, la convivencia y las decisiones de compra de tu mascota.
+              Vida Mascotera reune contenido calido, confiable y bien aterrizado para acompanarte en el bienestar, la convivencia y las decisiones de compra de tu mascota.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -44,8 +42,8 @@ export function HeroSection() {
 
         <div className="grid gap-4">
           <div className="rounded-[2rem] bg-brand-900 p-6 text-white">
-            <p className="text-sm uppercase tracking-[0.24em] text-brand-100">Lo más valioso</p>
-            <p className="mt-4 text-3xl font-semibold">Orientación confiable para que cada decisión se sienta más simple.</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-brand-100">Lo mas valioso</p>
+            <p className="mt-4 text-3xl font-semibold">Orientacion confiable para que cada decision se sienta mas simple.</p>
             <p className="mt-3 text-sm leading-7 text-brand-100/85">
               Desde rutinas cotidianas hasta compras comparadas con criterio, construimos una experiencia pensada para personas que aman a sus mascotas y quieren hacerlo bien.
             </p>

@@ -28,7 +28,7 @@ export function useAppBootstrap() {
       try {
         await syncPendingChanges()
       } catch {
-        setError('Recuperamos la conexion, pero aun estamos terminando de sincronizar tus cambios.')
+        setError('Volvimos a estar en linea. Algunos cambios pueden tardar un poco en reflejarse.')
       }
     }
   })
@@ -68,19 +68,19 @@ export function useAppBootstrap() {
         }
       })
       .catch(() => {
-        setError((current) => current ?? 'Algunos datos guardados localmente no pudieron restaurarse por completo.')
+        setError((current) => current ?? 'Algunos datos no pudieron recuperarse por completo.')
       })
   }, [hydrated, setFavorites, setPreferences])
 
   useEffect(() => {
     void persistFavoriteIds(favorites).catch(() => {
-      setError('Guardaremos tus favoritos en cuanto la conexion este mas estable.')
+      setError('Tus favoritos pueden tardar un poco en actualizarse, pero seguiremos intentandolo.')
     })
   }, [favorites])
 
   useEffect(() => {
     void persistPreferences(preferences).catch(() => {
-      setError('Tus preferencias se conservaran localmente hasta que podamos sincronizarlas.')
+      setError('Tus preferencias no pudieron actualizarse ahora mismo, pero puedes seguir navegando con normalidad.')
     })
   }, [preferences])
 
@@ -115,7 +115,7 @@ export function useAppBootstrap() {
         })
       })
       .catch(() => {
-        setError((current) => current ?? 'Tu sesion no pudo restaurarse del todo, pero puedes seguir explorando.')
+        setError((current) => current ?? 'Hubo un detalle al recuperar tu perfil, pero puedes seguir explorando.')
       })
   }, [setProfile])
 

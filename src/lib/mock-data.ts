@@ -297,6 +297,436 @@ export const mockArticles: Article[] = [
       },
     ],
   },
+  {
+    id: 'a7',
+    slug: 'como-crear-una-rutina-de-paseo-mas-tranquila',
+    title: 'Como crear una rutina de paseo mas tranquila para tu perro',
+    excerpt: 'Cambios simples para que el paseo deje de sentirse caotico y se convierta en un momento de conexion.',
+    category: 'perros',
+    readTime: '6 min',
+    author: 'Camila Nunez',
+    publishedAt: '2026-02-06',
+    updatedAt: '2026-02-12',
+    image: 'https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=1200&q=80',
+    tags: ['paseo', 'rutinas', 'conducta'],
+    heroNote: 'Un buen paseo no se mide por distancia, sino por calma, atencion y calidad de experiencia para ambos.',
+    takeaways: [
+      'Salir con menos prisa suele mejorar mucho el inicio del paseo.',
+      'Pequenas pausas de olfato ayudan a bajar tension.',
+      'La consistencia diaria vale mas que una salida perfecta de vez en cuando.',
+    ],
+    ctaLabel: 'Ver mas guias para paseo',
+    seoTitle: 'Rutina de paseo mas tranquila para tu perro | Vida Mascotera',
+    seoDescription: 'Consejos sencillos para mejorar la calidad del paseo diario y reducir tension en perros y tutores.',
+    body: [
+      {
+        title: 'El paseo empieza antes de abrir la puerta',
+        paragraphs: [
+          'Si el arnes aparece siempre en medio de apuro o excitacion extrema, el perro aprende a salir con demasiada carga. Hablar bajo, preparar todo con tiempo y pedir una pausa corta cambia mucho el tono de la salida.',
+          'No se trata de exigir inmovilidad perfecta. Basta con crear un inicio mas pausado y predecible.',
+        ],
+      },
+      {
+        title: 'Olfatear tambien es parte del paseo',
+        paragraphs: [
+          'Muchos perros descargan tension a traves del olfato. Dar espacio para explorar con calma suele mejorar la regulacion emocional y reducir tirones.',
+          'Cuando el paseo solo consiste en avanzar, se pierde una parte importante del bienestar canino.',
+        ],
+      },
+      {
+        title: 'La rutina sostiene el progreso',
+        paragraphs: [
+          'Horarios parecidos, recorridos conocidos y expectativas realistas ayudan a que el paseo se vuelva mas facil con el tiempo.',
+          'La mejora suele llegar por repeticion de buenos habitos, no por correcciones intensas.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a8',
+    slug: 'juegos-de-olfato-para-dias-de-lluvia',
+    title: 'Juegos de olfato para dias de lluvia o poca energia',
+    excerpt: 'Ideas sencillas para entretener a tu perro dentro de casa cuando salir no es una buena opcion.',
+    category: 'perros',
+    readTime: '4 min',
+    author: 'Equipo Vida Mascotera',
+    publishedAt: '2026-01-29',
+    updatedAt: '2026-02-01',
+    image: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80',
+    tags: ['juego', 'olfato', 'casa'],
+    heroNote: 'No todos los dias necesitan una gran salida: a veces unos minutos de busqueda dentro de casa aportan justo lo que tu perro necesita.',
+    takeaways: [
+      'El olfato cansa de forma amable y util.',
+      'Puedes empezar con premios faciles y aumentar dificultad poco a poco.',
+      'Cinco o diez minutos bien guiados pueden marcar diferencia.',
+    ],
+    ctaLabel: 'Descubrir ideas indoor',
+    seoTitle: 'Juegos de olfato en casa para perros | Vida Mascotera',
+    seoDescription: 'Recursos simples para estimular a tu perro dentro de casa cuando no es posible salir como siempre.',
+    body: [
+      {
+        title: 'Empieza con una dinamica muy simple',
+        paragraphs: [
+          'Esconde un premio a la vista, deja que lo encuentre y repite. Luego pasa a esconderlo detras de una silla, junto a una manta o debajo de una caja ligera.',
+          'La idea es construir confianza antes de buscar mas dificultad.',
+        ],
+      },
+      {
+        title: 'Usa materiales que ya tienes',
+        paragraphs: [
+          'Toallas enrolladas, cajas de carton y recipientes livianos suelen ser suficientes para crear pequenos retos de busqueda.',
+          'No hace falta comprar un juego especial para ofrecer una experiencia interesante.',
+        ],
+      },
+      {
+        title: 'Termina antes de que se canse demasiado',
+        paragraphs: [
+          'Un cierre amable deja buenas sensaciones y aumenta las ganas de repetir. Si esperas demasiado, puede pasar de estimulado a frustrado.',
+          'La calidad del momento importa mas que la duracion.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a9',
+    slug: 'ventanas-seguras-y-rincones-de-sol-para-gatos',
+    title: 'Ventanas seguras y rincones de sol para gatos',
+    excerpt: 'Como crear un pequeno observatorio felino en casa sin comprometer seguridad ni orden visual.',
+    category: 'gatos',
+    readTime: '5 min',
+    author: 'Lucia Ferrer',
+    publishedAt: '2026-01-22',
+    updatedAt: '2026-01-28',
+    image: 'https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=1200&q=80',
+    tags: ['ventanas', 'hogar', 'bienestar'],
+    heroNote: 'Mirar hacia afuera, tomar sol y descansar en altura son pequeños lujos cotidianos que muchos gatos valoran profundamente.',
+    takeaways: [
+      'La seguridad de ventanas siempre va primero.',
+      'Un solo punto de observacion bien resuelto puede ser suficiente.',
+      'Sumar confort visual tambien mejora la experiencia del hogar humano.',
+    ],
+    ctaLabel: 'Ver mas ideas para gatos',
+    seoTitle: 'Ventanas seguras y rincones de sol para gatos | Vida Mascotera',
+    seoDescription: 'Aprende a crear un espacio de observacion seguro y agradable para gatos de interior.',
+    body: [
+      {
+        title: 'Seguridad antes que estetica',
+        paragraphs: [
+          'Redes, mallas o soluciones firmes son imprescindibles si tu gato tendra acceso habitual a una ventana. No conviene improvisar cuando hay altura o aberturas amplias.',
+          'Una base segura te permite luego pensar en comodidad y diseno.',
+        ],
+      },
+      {
+        title: 'El confort cambia la experiencia',
+        paragraphs: [
+          'Una mantita, un cojín plano o una repisa con textura amable convierten un borde de ventana en un rincón realmente habitable.',
+          'Ese pequeño ajuste hace que el espacio se use mas y mejor.',
+        ],
+      },
+      {
+        title: 'Observacion y descanso pueden convivir',
+        paragraphs: [
+          'Muchos gatos alternan momentos de vigilancia suave con siestas cortas al sol. Diseñar ese punto para ambas cosas mejora su valor diario.',
+          'No necesitas una gran instalacion para lograrlo.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a10',
+    slug: 'como-detectar-si-tu-gato-necesita-mas-estimulacion',
+    title: 'Como detectar si tu gato necesita mas estimulacion',
+    excerpt: 'Senales silenciosas que pueden indicar aburrimiento, exceso de energia o falta de variedad en casa.',
+    category: 'gatos',
+    readTime: '6 min',
+    author: 'Equipo Vida Mascotera',
+    publishedAt: '2026-01-15',
+    updatedAt: '2026-01-20',
+    image: 'https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=1200&q=80',
+    tags: ['juego', 'conducta', 'indoor'],
+    heroNote: 'No siempre se trata de un problema de conducta: a veces tu gato solo necesita un entorno con mas oportunidades de explorar y jugar.',
+    takeaways: [
+      'La apatía y la inquietud pueden tener el mismo origen.',
+      'Pequenos cambios de entorno pueden generar gran diferencia.',
+      'La observacion diaria ayuda mas que una solucion impulsiva.',
+    ],
+    ctaLabel: 'Explorar guias felinas',
+    seoTitle: 'Senales de que tu gato necesita mas estimulacion | Vida Mascotera',
+    seoDescription: 'Claves para reconocer aburrimiento o falta de enriquecimiento en gatos de interior.',
+    body: [
+      {
+        title: 'Algunas senales pasan desapercibidas',
+        paragraphs: [
+          'Dormir casi todo el dia, insistir con maullidos en ciertos horarios o buscar juego brusco de repente pueden ser formas de expresar falta de estimulo.',
+          'Conviene mirar el conjunto de habitos y no una sola conducta aislada.',
+        ],
+      },
+      {
+        title: 'La variedad importa',
+        paragraphs: [
+          'Mover un rascador, cambiar un juguete o abrir una nueva ruta de altura puede renovar mucho el interes del gato por su entorno.',
+          'No hace falta sumar cosas todo el tiempo, sino rotar mejor los recursos disponibles.',
+        ],
+      },
+      {
+        title: 'Una rutina de juego ayuda a ordenar el dia',
+        paragraphs: [
+          'Sesiones breves de juego antes de comer o al final de la tarde suelen dar estructura y descarga.',
+          'Ese tipo de rituales mejora convivencia y bienestar con poco esfuerzo.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a11',
+    slug: 'como-leer-la-etiqueta-de-un-alimento-sin-volverte-loco',
+    title: 'Como leer la etiqueta de un alimento sin volverte loco',
+    excerpt: 'Una guia breve para entender ingredientes, orden de lista y mensajes de marketing con mas criterio.',
+    category: 'alimentacion',
+    readTime: '6 min',
+    author: 'Dra. Paula Segura',
+    publishedAt: '2026-01-10',
+    updatedAt: '2026-01-14',
+    image: 'https://images.unsplash.com/photo-1589924691995-400dc9ecc119?auto=format&fit=crop&w=1200&q=80',
+    tags: ['etiquetas', 'nutricion', 'compras'],
+    heroNote: 'No necesitas memorizar toda una tabla tecnica para hacer una compra mas informada: basta con entender tres o cuatro puntos clave.',
+    takeaways: [
+      'La lista de ingredientes cuenta una parte importante de la historia.',
+      'Promesas grandes en el frente del empaque no siempre significan mejor calidad.',
+      'Comparar dos opciones con calma evita compras por impulso.',
+    ],
+    ctaLabel: 'Seguir aprendiendo sobre alimentacion',
+    seoTitle: 'Como leer la etiqueta de un alimento para mascotas | Vida Mascotera',
+    seoDescription: 'Claves para interpretar etiquetas de alimentos y comprar con mas criterio.',
+    body: [
+      {
+        title: 'Empieza por lo mas visible',
+        paragraphs: [
+          'La lista de ingredientes y el analisis garantizado suelen ofrecer informacion suficiente para una comparacion basica entre opciones.',
+          'No hace falta entrar en tecnicismos extremos para detectar diferencias claras.',
+        ],
+      },
+      {
+        title: 'No todo lo que suena premium lo es',
+        paragraphs: [
+          'Palabras como natural, balanceado o gourmet pueden ayudar a vender, pero no reemplazan una lectura minima del producto.',
+          'Conviene mirar el conjunto y no dejarse guiar solo por el diseno del empaque.',
+        ],
+      },
+      {
+        title: 'Compara segun tu contexto',
+        paragraphs: [
+          'Edad, nivel de actividad, rutina de alimentacion y presupuesto cambian mucho la lectura correcta de una etiqueta.',
+          'La mejor opcion es la que encaja con necesidades reales y se sostiene en el tiempo.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a12',
+    slug: 'senales-de-que-la-rutina-de-comida-necesita-ajustes',
+    title: 'Senales de que la rutina de comida necesita ajustes',
+    excerpt: 'Pequenos indicadores cotidianos para revisar horarios, porciones o formato antes de que aparezca el desorden.',
+    category: 'alimentacion',
+    readTime: '5 min',
+    author: 'Equipo Vida Mascotera',
+    publishedAt: '2026-01-04',
+    updatedAt: '2026-01-09',
+    image: 'https://images.unsplash.com/photo-1583512603806-077998240c7a?auto=format&fit=crop&w=1200&q=80',
+    tags: ['rutinas', 'porciones', 'bienestar'],
+    heroNote: 'Muchas veces la alimentacion no necesita un gran cambio, sino pequeños ajustes de horario, ambiente o constancia.',
+    takeaways: [
+      'El contexto de la comida influye tanto como el alimento.',
+      'Cambios de apetito merecen observacion, no solo reaccion inmediata.',
+      'Una rutina clara da tranquilidad a toda la casa.',
+    ],
+    ctaLabel: 'Ver mas consejos de rutina',
+    seoTitle: 'Cuando ajustar la rutina de comida de tu mascota | Vida Mascotera',
+    seoDescription: 'Observa estas senales para revisar porciones, horarios o ambiente de alimentacion.',
+    body: [
+      {
+        title: 'La velocidad tambien dice cosas',
+        paragraphs: [
+          'Comer con demasiada ansiedad, dejar siempre parte del plato o pedir comida fuera de horario pueden ser pistas de que algo necesita revisarse.',
+          'No siempre es un problema del alimento en si.',
+        ],
+      },
+      {
+        title: 'El ambiente importa mas de lo que parece',
+        paragraphs: [
+          'Ruido, interrupciones, recipientes incomodos o cambios frecuentes de lugar pueden alterar una comida que en teoria estaba bien planteada.',
+          'A veces mejorar el contexto resuelve mas que cambiar de marca.',
+        ],
+      },
+      {
+        title: 'Observa antes de decidir',
+        paragraphs: [
+          'Tomarte unos dias para mirar horarios, energia y respuesta digestiva da mejores pistas que una compra impulsiva.',
+          'Los ajustes tranquilos suelen ser los mas sostenibles.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a13',
+    slug: 'botiquin-basico-para-el-dia-a-dia-con-mascotas',
+    title: 'Botiquin basico para el dia a dia con mascotas',
+    excerpt: 'Que si conviene tener a mano en casa y que es mejor dejar fuera para evitar errores innecesarios.',
+    category: 'salud',
+    readTime: '5 min',
+    author: 'Dr. Marcelo Vidal',
+    publishedAt: '2025-12-28',
+    updatedAt: '2026-01-03',
+    image: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1200&q=80',
+    tags: ['hogar', 'prevencion', 'primeros-cuidados'],
+    heroNote: 'Tener un pequeño botiquin no significa resolver todo en casa, sino estar mejor preparado para actuar con calma mientras pides ayuda si hace falta.',
+    takeaways: [
+      'Lo basico bien elegido suele ser suficiente.',
+      'No automediques por intuicion.',
+      'La informacion de tu veterinario siempre debe estar accesible.',
+    ],
+    ctaLabel: 'Leer mas sobre cuidados',
+    seoTitle: 'Botiquin basico para mascotas en casa | Vida Mascotera',
+    seoDescription: 'Una lista simple para organizar un botiquin domestico util y prudente para mascotas.',
+    body: [
+      {
+        title: 'Piensa en orden y acceso rapido',
+        paragraphs: [
+          'Gasas, suero fisiologico, tijeras romas, guantes y numeros de contacto utiles son una base razonable para empezar.',
+          'La organizacion importa tanto como el contenido.',
+        ],
+      },
+      {
+        title: 'Menos improvisacion, mejor criterio',
+        paragraphs: [
+          'Muchos productos humanos no deberian usarse sin indicacion profesional. Tenerlos a mano no significa que sean seguros para cualquier situacion.',
+          'Conviene separar claramente lo apto para uso cotidiano de lo que requiere consulta.',
+        ],
+      },
+      {
+        title: 'Actualiza cada cierto tiempo',
+        paragraphs: [
+          'Revisar fechas, reponer faltantes y mantener una lista visible te ahorra dudas cuando aparece una urgencia menor.',
+          'La prevencion tambien puede ser muy domestica.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a14',
+    slug: 'como-elegir-un-rascador-que-tu-gato-si-use',
+    title: 'Como elegir un rascador que tu gato si use',
+    excerpt: 'Altura, textura y ubicacion importan mucho mas que el tamano del accesorio o su precio.',
+    category: 'accesorios',
+    readTime: '5 min',
+    author: 'Valeria Montes',
+    publishedAt: '2025-12-22',
+    updatedAt: '2025-12-27',
+    image: 'https://images.unsplash.com/photo-1511044568932-338cba0ad803?auto=format&fit=crop&w=1200&q=80',
+    tags: ['rascador', 'gatos', 'hogar'],
+    heroNote: 'El mejor rascador no es el mas vistoso: es el que responde a como y donde le gusta rascar a tu gato.',
+    takeaways: [
+      'La estabilidad del rascador es clave.',
+      'La ubicacion cambia por completo su uso.',
+      'Conviene observar primero y comprar despues.',
+    ],
+    ctaLabel: 'Explorar accesorios felinos',
+    seoTitle: 'Como elegir un rascador para gatos | Vida Mascotera',
+    seoDescription: 'Consejos para comprar un rascador mas util, estable y atractivo para tu gato.',
+    body: [
+      {
+        title: 'Mira que hace tu gato hoy',
+        paragraphs: [
+          'Si rasca superficies verticales, horizontales o esquinas, esa observacion ya te da una pista concreta sobre el formato mas adecuado.',
+          'Comprar sin mirar esos habitos suele llevar a errores repetidos.',
+        ],
+      },
+      {
+        title: 'La textura y la firmeza importan',
+        paragraphs: [
+          'Muchos gatos rechazan rascadores que se mueven demasiado o se sienten blandos. La sensacion corporal influye mucho en la aceptacion.',
+          'Una base firme transmite seguridad y favorece el uso espontaneo.',
+        ],
+      },
+      {
+        title: 'Ponlo donde ya vive el habito',
+        paragraphs: [
+          'Acercar el rascador a la zona donde ya rasca tu gato suele funcionar mejor que esconderlo para mantener la casa impecable.',
+          'Primero conviene consolidar uso, luego afinar ubicacion.',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a15',
+    slug: 'comedero-lento-vs-plato-amplio-que-ayuda-mas',
+    title: 'Comedero lento vs plato amplio: que ayuda mas',
+    excerpt: 'Una comparativa breve para elegir segun velocidad al comer, tipo de mascota y rutina de la casa.',
+    category: 'comparativas',
+    readTime: '7 min',
+    author: 'Equipo Vida Mascotera',
+    publishedAt: '2025-12-16',
+    updatedAt: '2025-12-21',
+    image: 'https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=1200&q=80',
+    tags: ['comparativas', 'alimentacion', 'accesorios'],
+    heroNote: 'No todos los problemas al comer se resuelven con el mismo accesorio: el contexto y el tipo de mascota cambian mucho la respuesta.',
+    takeaways: [
+      'El comedero lento no siempre es la mejor solucion para todos.',
+      'El plato amplio puede ayudar mas en ciertos gatos sensibles.',
+      'Mirar la causa del problema evita compras innecesarias.',
+    ],
+    ctaLabel: 'Ver mas comparativas practicas',
+    seoTitle: 'Comedero lento vs plato amplio | Vida Mascotera',
+    seoDescription: 'Analisis simple para decidir entre comedero lento y plato amplio segun necesidad real.',
+    comparisonTable: {
+      title: 'Comparativa practica',
+      optionALabel: 'Comedero lento',
+      optionBLabel: 'Plato amplio',
+      rows: [
+        {
+          criteria: 'Velocidad al comer',
+          optionA: 'Ayuda a reducir ansiedad en algunos perros',
+          optionB: 'No cambia mucho el ritmo',
+          recommendation: 'Si el problema es comer demasiado rapido, el comedero lento suele ayudar mas.',
+        },
+        {
+          criteria: 'Comodidad para bigotes',
+          optionA: 'Puede resultar incomodo para ciertos gatos',
+          optionB: 'Suele ser mas amable en gatos sensibles',
+          recommendation: 'En felinos, el plato amplio gana cuando hay rechazo por contacto.',
+        },
+        {
+          criteria: 'Limpieza',
+          optionA: 'A veces requiere mas detalle',
+          optionB: 'Suele ser mas simple de lavar',
+          recommendation: 'El plato amplio facilita mantenimiento diario.',
+        },
+      ],
+    },
+    body: [
+      {
+        title: 'Primero identifica el problema real',
+        paragraphs: [
+          'No es lo mismo un perro que come con ansiedad que un gato que evita el plato por incomodidad o estres. Elegir bien empieza por observar mejor.',
+          'Un accesorio correcto puede ayudar mucho, pero no reemplaza el diagnostico cotidiano.',
+        ],
+      },
+      {
+        title: 'Cada formato tiene su escenario',
+        paragraphs: [
+          'El comedero lento introduce obstaculos y reduce velocidad. El plato amplio da mas espacio y puede mejorar la experiencia de ciertos gatos o mascotas sensibles.',
+          'No conviene esperar que ambos resuelvan lo mismo.',
+        ],
+      },
+      {
+        title: 'Lo practico tambien cuenta',
+        paragraphs: [
+          'Si el accesorio es incomodo de limpiar o termina guardado en un cajon, deja de ser una solucion real.',
+          'La mejor compra es la que se sostiene en el uso diario.',
+        ],
+      },
+    ],
+  },
 ]
 
 export const mockProducts: ProductRecommendation[] = [

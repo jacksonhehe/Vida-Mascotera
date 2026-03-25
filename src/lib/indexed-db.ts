@@ -2,7 +2,7 @@ import { openDB } from 'idb'
 import type { Article, ContactMessageRecord, ProductRecommendation, SyncQueueItem, UserPreferences } from '@/types/content'
 
 const DB_NAME = 'vida-mascotera-db'
-const DB_VERSION = 2
+const DB_VERSION = 3
 
 export const dbPromise = openDB(DB_NAME, DB_VERSION, {
   upgrade(db, oldVersion) {
@@ -30,6 +30,19 @@ export const dbPromise = openDB(DB_NAME, DB_VERSION, {
       if (!db.objectStoreNames.contains('preferences')) {
         db.createObjectStore('preferences', { keyPath: 'id' })
       }
+    }
+
+    if (oldVersion < 3) {
+      if (db.objectStoreNames.contains('content')) {
+        db.deleteObjectStore('content')
+      }
+
+      if (db.objectStoreNames.contains('products')) {
+        db.deleteObjectStore('products')
+      }
+
+      db.createObjectStore('content', { keyPath: 'id' })
+      db.createObjectStore('products', { keyPath: 'id' })
     }
   },
 })

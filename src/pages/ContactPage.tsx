@@ -25,7 +25,7 @@ function validate(form: ContactMessageInput) {
   }
 
   if (form.subject.trim().length < 4) {
-    errors.subject = 'Cuéntanos un asunto un poco más claro.'
+    errors.subject = 'Cuentanos un asunto un poco mas claro.'
   }
 
   if (form.message.trim().length < 20) {
@@ -58,7 +58,7 @@ export function ContactPage() {
       setFeedback({
         tone: result.queued ? 'warning' : 'success',
         message: result.queued
-          ? 'Guardamos tu mensaje y lo enviaremos en cuanto la conexion o el backend esten disponibles.'
+          ? 'Recibimos tu mensaje y lo enviaremos en cuanto tengamos una mejor conexion.'
           : 'Tu mensaje ya fue enviado. Gracias por escribirnos.',
       })
       setForm(initialForm)
@@ -108,7 +108,7 @@ export function ContactPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-coral-600">Escribenos</p>
             <h2 className="mt-3 text-3xl font-semibold text-slate-900">Cuentanos como podemos ayudarte</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
-              Este formulario ya esta listo para guardar mensajes reales en Supabase y seguir funcionando incluso si la conexion falla.
+              Si quieres escribirnos por una colaboracion, una consulta o una idea, este es el mejor lugar para empezar.
             </p>
           </div>
 
