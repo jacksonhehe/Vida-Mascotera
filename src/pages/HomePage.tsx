@@ -26,25 +26,25 @@ export function HomePage({ articles }: HomePageProps) {
       <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="rounded-[2rem] bg-white p-8 shadow-soft">
           <SectionHeading
-            description="Creamos contenido para resolver dudas reales sobre bienestar, rutina, hogar y decisiones cotidianas sin sonar frio ni excesivamente tecnico."
-            eyebrow="Nuestra propuesta"
-            title="Una experiencia pensada para acompanarte antes, durante y despues de cada decision."
+            description="Reunimos lecturas utiles sobre bienestar, rutina, hogar y convivencia para que encuentres ayuda clara cuando la necesites."
+            eyebrow="Empieza por aqui"
+            title="Contenido practico para entender mejor a tu mascota."
           />
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
               {
-                title: 'Confianza editorial',
-                body: 'Guias claras y cercanas para entender mejor a tu mascota y actuar con mas seguridad.',
+                title: 'Guias claras',
+                body: 'Explicaciones simples para entender mejor a tu mascota y actuar con mas seguridad.',
                 Icon: ShieldCheck,
               },
               {
-                title: 'Criterio util',
-                body: 'Comparativas y lecturas que ayudan a decidir mejor sin convertir todo en compra.',
+                title: 'Comparativas utiles',
+                body: 'Ayudas practicas para elegir con mas calma entre opciones parecidas.',
                 Icon: Star,
               },
               {
-                title: 'Acompanamiento cotidiano',
-                body: 'Contenido pensado para la vida diaria, no solo para momentos puntuales.',
+                title: 'Vida diaria',
+                body: 'Consejos pensados para la convivencia de todos los dias, no solo para momentos puntuales.',
                 Icon: HeartHandshake,
               },
             ].map(({ title, body, Icon }) => (
@@ -78,7 +78,7 @@ export function HomePage({ articles }: HomePageProps) {
 
       <section className="space-y-6">
         <SectionHeading
-          description="Desde la convivencia cotidiana hasta la nutricion y las decisiones mejor pensadas, organizamos el contenido para que encuentres ayuda rapido."
+          description="Organizamos los temas principales para que encuentres rapido lo que necesitas segun tu mascota o tu duda."
           eyebrow="Explora por temas"
           title="Grandes pilares para cuidar mejor a tu mascota."
         />
@@ -105,9 +105,9 @@ export function HomePage({ articles }: HomePageProps) {
       {highlightedGuides.length > 0 ? (
         <section className="space-y-6">
           <SectionHeading
-            description="Una seleccion editorial para profundizar en decisiones cotidianas y resolver dudas con mas contexto, sin convertir la portada en una vitrina."
+            description="Lecturas seleccionadas para profundizar en temas frecuentes y seguir aprendiendo con calma."
             eyebrow="Guias destacadas"
-            title="Lecturas para decidir mejor, con criterio y sin impulso."
+            title="Lecturas para resolver dudas con mas contexto."
           />
           <div className="grid gap-6 lg:grid-cols-3">
             {highlightedGuides.map((article) => (

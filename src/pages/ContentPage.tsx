@@ -126,7 +126,7 @@ export function ContentPage({ category, articles }: ContentPageProps) {
         <section className="space-y-6">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900">Sigue leyendo</h2>
-            <p className="mt-1 text-sm text-slate-500">Una seleccion editorial para ampliar contexto sin empujar recomendaciones de compra.</p>
+            <p className="mt-1 text-sm text-slate-500">Mas lecturas relacionadas para profundizar en este tema.</p>
           </div>
           <div className="grid gap-6 lg:grid-cols-3">
             {editorialPicks.map((article) => (

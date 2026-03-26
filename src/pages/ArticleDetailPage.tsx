@@ -1,7 +1,6 @@
 import { ArrowRight, Clock3, Heart, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ArticleCard } from '@/components/cards/ArticleCard'
-import { ProductCard } from '@/components/cards/ProductCard'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
@@ -14,10 +13,7 @@ interface ArticleDetailPageProps {
   relatedArticles: Article[]
 }
 
-export function ArticleDetailPage({ article, products, relatedArticles }: ArticleDetailPageProps) {
-  const relatedProducts = products
-    .filter((product) => product.category === article.category || article.category === 'comparativas')
-    .slice(0, 3)
+export function ArticleDetailPage({ article, products: _products, relatedArticles }: ArticleDetailPageProps) {
   const detailPath = article.category === 'comparativas' ? '/comparativas' : '/blog'
   const canonicalPath = article.category === 'comparativas' ? `/comparativas/${article.slug}` : `/blog/${article.slug}`
 
@@ -47,7 +43,7 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
                 className="rounded-full bg-brand-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-800"
                 to={detailPath}
               >
-                {article.category === 'comparativas' ? 'Comparativa editorial' : 'Artículo recomendado'}
+                {article.category === 'comparativas' ? 'Comparativa' : 'Articulo'}
               </Link>
               <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600">
                 <Clock3 className="h-4 w-4" />
@@ -73,7 +69,7 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
           <div className="relative min-h-[320px]">
             <img alt={article.title} className="h-full w-full object-cover" src={article.image} />
             <div className="absolute inset-x-6 bottom-6 rounded-[1.75rem] bg-slate-950/75 p-5 text-white backdrop-blur">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Resumen rápido</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Resumen rapido</p>
               <ul className="mt-3 space-y-2 text-sm leading-6 text-white/90">
                 {article.takeaways.map((takeaway) => (
                   <li className="flex gap-3" key={takeaway}>
@@ -110,7 +106,7 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
                       <th className="px-4">Criterio</th>
                       <th className="px-4">{article.comparisonTable.optionALabel}</th>
                       <th className="px-4">{article.comparisonTable.optionBLabel}</th>
-                      <th className="px-4">Qué conviene mirar</th>
+                      <th className="px-4">Que conviene mirar</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -133,25 +129,16 @@ export function ArticleDetailPage({ article, products, relatedArticles }: Articl
           <div className="rounded-[2rem] bg-brand-900 p-6 text-white shadow-soft">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm">
               <Heart className="h-4 w-4" />
-              Vida Mascotera recomienda
+              Vida Mascotera
             </div>
-            <h2 className="mt-5 text-2xl font-semibold">Una lectura útil debe ayudarte a actuar mejor, no solo a leer más.</h2>
+            <h2 className="mt-5 text-2xl font-semibold">Una buena lectura debe darte ideas claras para poner en practica.</h2>
             <p className="mt-4 text-sm leading-7 text-brand-50/90">
-              Creamos guías, comparativas y recomendaciones con foco en bienestar, claridad y decisiones realistas para la vida diaria.
+              Reunimos guias y comparativas para ayudarte a entender mejor este tema y tomar decisiones mas simples en el dia a dia.
             </p>
             <Button className="mt-6 w-full" to="/contacto" variant="secondary">
-              Consultar una colaboración
+              Consultar una colaboracion
             </Button>
           </div>
-
-          {relatedProducts.length > 0 ? (
-            <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-slate-900">Recomendaciones relacionadas</h2>
-              {relatedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </section>
-          ) : null}
         </aside>
       </section>
 
