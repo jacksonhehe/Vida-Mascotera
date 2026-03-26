@@ -84,6 +84,51 @@ create table if not exists public.user_preferences (
   updated_at timestamptz not null default now()
 );
 
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.profiles (id, full_name, avatar_url, role)
+  values (
+    new.id,
+    new.raw_user_meta_data->>'full_name',
+    new.raw_user_meta_data->>'avatar_url',
+    coalesce(new.raw_app_meta_data->>'role', new.raw_user_meta_data->>'role', 'reader')
+  )
+  on conflict (id) do update
+  set
+    full_name = coalesce(excluded.full_name, public.profiles.full_name),
+    avatar_url = coalesce(excluded.avatar_url, public.profiles.avatar_url),
+    role = coalesce(excluded.role, public.profiles.role),
+    updated_at = now();
+
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute procedure public.handle_new_user();
+
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where id = auth.uid()
+      and role = 'admin'
+  );
+$$;
+
 alter table public.articles enable row level security;
 alter table public.contact_messages enable row level security;
 alter table public.profiles enable row level security;
@@ -106,14 +151,7 @@ create policy "profiles_admin_read_all"
 on public.profiles
 for select
 to authenticated
-using (
-  exists (
-    select 1
-    from public.profiles as viewer
-    where viewer.id = auth.uid()
-      and viewer.role = 'admin'
-  )
-);
+using (public.is_admin());
 
 create policy "articles_public_read_published"
 on public.articles
@@ -125,22 +163,8 @@ create policy "articles_admin_manage"
 on public.articles
 for all
 to authenticated
-using (
-  exists (
-    select 1
-    from public.profiles as viewer
-    where viewer.id = auth.uid()
-      and viewer.role = 'admin'
-  )
-)
-with check (
-  exists (
-    select 1
-    from public.profiles as viewer
-    where viewer.id = auth.uid()
-      and viewer.role = 'admin'
-  )
-);
+using (public.is_admin())
+with check (public.is_admin());
 
 -- Bucket expected by the admin panel:
 -- insert into storage.buckets (id, name, public) values ('article-images', 'article-images', true);

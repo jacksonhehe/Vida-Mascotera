@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
 import { StatusBanner } from '@/components/common/StatusBanner'
+import { missingSupabaseEnvVars } from '@/lib/supabase'
 import { useAuth } from '@/providers/AuthProvider'
 import type { UserRole } from '@/types/content'
 
@@ -50,6 +51,14 @@ function resolveRedirectPath(role: UserRole | null, fallbackPath: string | null)
   }
 
   return '/'
+}
+
+function getUnavailableMessage() {
+  if (import.meta.env.DEV && missingSupabaseEnvVars.length > 0) {
+    return `El acceso no está disponible porque faltan variables de entorno: ${missingSupabaseEnvVars.join(', ')}. Crea un archivo .env con esos valores para habilitar el login.`
+  }
+
+  return 'El acceso no está disponible en este momento. Inténtalo nuevamente más tarde.'
 }
 
 export function LoginPage() {
@@ -199,10 +208,7 @@ export function LoginPage() {
 
           {status === 'unavailable' ? (
             <div className="mt-8">
-              <StatusBanner
-                message="El acceso no está disponible en este momento. Inténtalo nuevamente más tarde."
-                tone="warning"
-              />
+              <StatusBanner message={getUnavailableMessage()} tone="warning" />
             </div>
           ) : null}
 

@@ -1,4 +1,4 @@
-import { FilePenLine, LogOut, Plus, ShieldCheck } from 'lucide-react'
+import { ExternalLink, FilePenLine, LogOut, Plus, ShieldCheck } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
@@ -92,6 +92,10 @@ export function AdminLayout() {
               <div className="hidden rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600 sm:block">
                 {profile?.fullName ?? 'Administrador'}
               </div>
+              <Button to="/" variant="secondary">
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Ver sitio
+              </Button>
               <Button onClick={() => void signOut()} variant="secondary">
                 <LogOut className="mr-2 h-4 w-4" />
                 Salir

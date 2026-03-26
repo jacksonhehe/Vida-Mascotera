@@ -1,6 +1,27 @@
 import { supabase } from '@/lib/supabase'
 import type { SupabaseProfileDTO, UserProfile, UserRole } from '@/types/content'
 
+function isUserRole(value: unknown): value is UserRole {
+  return value === 'admin' || value === 'editor' || value === 'reader'
+}
+
+function getRoleFromUserMetadata(user: {
+  app_metadata?: Record<string, unknown>
+  user_metadata?: Record<string, unknown>
+}): UserRole {
+  const appRole = user.app_metadata?.role
+  if (isUserRole(appRole)) {
+    return appRole
+  }
+
+  const userRole = user.user_metadata?.role
+  if (isUserRole(userRole)) {
+    return userRole
+  }
+
+  return 'reader'
+}
+
 export async function signInWithMagicLink(email: string) {
   if (!supabase) {
     throw new Error('El acceso por correo todavía no está disponible.')
@@ -86,7 +107,7 @@ export async function getCurrentUserProfile(): Promise<UserProfile | null> {
     email: data.user.email ?? '',
     fullName: data.user.user_metadata.full_name ?? 'Comunidad Vida Mascotera',
     avatarUrl: data.user.user_metadata.avatar_url,
-    role: 'reader',
+    role: getRoleFromUserMetadata(data.user),
   }
 
   const profileResult = await supabase.from('profiles').select('*').eq('id', data.user.id).maybeSingle<SupabaseProfileDTO>()
