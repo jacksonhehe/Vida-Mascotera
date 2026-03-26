@@ -1,9 +1,12 @@
 import { ArrowRight, Star } from 'lucide-react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ProductCard } from '@/components/cards/ProductCard'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
+import { useAppStore } from '@/store/app-store'
+import { buildSavedItemKey } from '@/utils/saved-items'
 import type { ProductRecommendation } from '@/types/content'
 
 interface ProductDetailPageProps {
@@ -12,6 +15,12 @@ interface ProductDetailPageProps {
 }
 
 export function ProductDetailPage({ product, relatedProducts }: ProductDetailPageProps) {
+  const recordHistory = useAppStore((state) => state.recordHistory)
+
+  useEffect(() => {
+    recordHistory(buildSavedItemKey('product', product.id))
+  }, [product.id, recordHistory])
+
   return (
     <article className="space-y-10">
       <Seo
@@ -25,7 +34,7 @@ export function ProductDetailPage({ product, relatedProducts }: ProductDetailPag
       <Breadcrumbs
         items={[
           { label: 'Inicio', to: '/' },
-          { label: 'Guias de compra', to: '/accesorios' },
+          { label: 'Guías de compra', to: '/accesorios' },
           { label: product.name },
         ]}
       />
@@ -72,7 +81,7 @@ export function ProductDetailPage({ product, relatedProducts }: ProductDetailPag
               <h2 className="mt-2 text-3xl font-semibold text-slate-900">Otras recomendaciones de la misma línea</h2>
             </div>
             <Link className="inline-flex items-center gap-2 text-sm font-semibold text-brand-800" to="/accesorios">
-              Volver a guias de compra
+              Volver a guías de compra
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

@@ -1,7 +1,7 @@
-import { useEffect, useState, useEffectEvent } from 'react'
-import { getFavorites, getStoredPreferences } from '@/lib/indexed-db'
+import { useEffect, useRef, useState, useEffectEvent } from 'react'
 import { getArticles, getProducts } from '@/services/content-service'
-import { persistFavoriteIds, persistPreferences, syncPendingChanges } from '@/services/offline-sync-service'
+import { loadUserExperience, persistFavoriteKeys, persistHistory, persistPreferences, syncPendingChanges } from '@/services/offline-sync-service'
+import { useAuth } from '@/providers/AuthProvider'
 import { useAppStore } from '@/store/app-store'
 import type { Article, ProductRecommendation } from '@/types/content'
 
@@ -11,12 +11,16 @@ export function useAppBootstrap() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const { profile } = useAuth()
   const favorites = useAppStore((state) => state.favorites)
+  const history = useAppStore((state) => state.history)
   const preferences = useAppStore((state) => state.preferences)
   const hydrated = useAppStore((state) => state.hydrated)
   const setOffline = useAppStore((state) => state.setOffline)
   const setFavorites = useAppStore((state) => state.setFavorites)
+  const setHistory = useAppStore((state) => state.setHistory)
   const setPreferences = useAppStore((state) => state.setPreferences)
+  const experienceLoadedRef = useRef(false)
 
   const handleConnectivity = useEffectEvent(async () => {
     const offline = !navigator.onLine
@@ -26,7 +30,7 @@ export function useAppBootstrap() {
       try {
         await syncPendingChanges()
       } catch {
-        setError('Volvimos a estar en linea. Algunos cambios pueden tardar un poco en reflejarse.')
+        setError('Volvimos a estar en línea. Algunos cambios pueden tardar un poco en reflejarse.')
       }
     }
   })
@@ -55,32 +59,50 @@ export function useAppBootstrap() {
       return
     }
 
-    void Promise.all([getFavorites(), getStoredPreferences()])
-      .then(([storedFavorites, storedPreferences]) => {
-        if (storedFavorites.length) {
-          setFavorites(storedFavorites)
-        }
+    experienceLoadedRef.current = false
 
-        if (storedPreferences) {
-          setPreferences(storedPreferences)
-        }
+    void loadUserExperience(profile?.id ?? null)
+      .then((experience) => {
+        setFavorites(experience.favorites)
+        setPreferences(experience.preferences)
+        setHistory(experience.history)
+        experienceLoadedRef.current = true
       })
       .catch(() => {
-        setError((current) => current ?? 'Algunos datos no pudieron recuperarse por completo.')
+        setError((current) => current ?? 'Algunos datos de tu cuenta no pudieron recuperarse por completo.')
+        experienceLoadedRef.current = true
       })
-  }, [hydrated, setFavorites, setPreferences])
+  }, [hydrated, profile?.id, setFavorites, setHistory, setPreferences])
 
   useEffect(() => {
-    void persistFavoriteIds(favorites).catch(() => {
-      setError('Tus favoritos pueden tardar un poco en actualizarse, pero seguiremos intentandolo.')
+    if (!experienceLoadedRef.current) {
+      return
+    }
+
+    void persistFavoriteKeys(favorites, profile?.id ?? null).catch(() => {
+      setError('Tus favoritos pueden tardar un poco en actualizarse, pero seguiremos intentándolo.')
     })
-  }, [favorites])
+  }, [favorites, profile?.id])
 
   useEffect(() => {
-    void persistPreferences(preferences).catch(() => {
+    if (!experienceLoadedRef.current) {
+      return
+    }
+
+    void persistPreferences(preferences, profile?.id ?? null).catch(() => {
       setError('Tus preferencias no pudieron actualizarse ahora mismo, pero puedes seguir navegando con normalidad.')
     })
-  }, [preferences])
+  }, [preferences, profile?.id])
+
+  useEffect(() => {
+    if (!experienceLoadedRef.current) {
+      return
+    }
+
+    void persistHistory(history, profile?.id ?? null).catch(() => {
+      setError('Tu historial reciente puede tardar un poco en sincronizarse, pero no se perderá.')
+    })
+  }, [history, profile?.id])
 
   useEffect(() => {
     window.addEventListener('online', handleConnectivity)

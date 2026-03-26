@@ -59,12 +59,12 @@ export function ContentPage({ category, articles }: ContentPageProps) {
   )
 
   const emptyTitle =
-    searchTerm.length > 0 ? 'No encontramos resultados con esa busqueda' : 'Aun no tenemos contenido visible en esta seccion'
+    searchTerm.length > 0 ? 'No encontramos resultados con esa búsqueda' : 'Aún no tenemos contenido visible en esta sección'
 
   const emptyBody =
     searchTerm.length > 0
-      ? 'Prueba con otra palabra clave o vuelve a la vista completa para descubrir mas lecturas y comparativas.'
-      : 'Estamos preparando nuevas publicaciones para esta categoria. Mientras tanto, puedes explorar el blog o nuestras comparativas.'
+      ? 'Prueba con otra palabra clave o vuelve a la vista completa para descubrir más lecturas y comparativas.'
+      : 'Estamos preparando nuevas publicaciones para esta categoría. Mientras tanto, puedes explorar el blog o nuestras comparativas.'
 
   return (
     <div className="space-y-10">
@@ -85,7 +85,7 @@ export function ContentPage({ category, articles }: ContentPageProps) {
             value={searchTerm}
           />
           <label className="sr-only" htmlFor="content-filter">
-            Filtrar categoria
+            Filtrar categoría
           </label>
           <select
             className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
@@ -93,7 +93,7 @@ export function ContentPage({ category, articles }: ContentPageProps) {
             onChange={(event) => setSelectedCategory(event.target.value as PetCategory | 'todas')}
             value={selectedCategory}
           >
-            <option value="todas">Mostrar solo esta seccion</option>
+            <option value="todas">Mostrar solo esta sección</option>
             <option value={category}>{category}</option>
             <option value="blog">blog</option>
             <option value="comparativas">comparativas</option>
@@ -105,7 +105,7 @@ export function ContentPage({ category, articles }: ContentPageProps) {
         <div className="flex items-center justify-between gap-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900">Contenido relacionado</h2>
-            <p className="mt-1 text-sm text-slate-500">Encuentra ideas utiles para esta etapa, necesidad o tipo de mascota.</p>
+            <p className="mt-1 text-sm text-slate-500">Encuentra ideas útiles para esta etapa, necesidad o tipo de mascota.</p>
           </div>
           <p className="text-sm text-slate-500">{filteredArticles.length} resultados</p>
         </div>
@@ -126,7 +126,7 @@ export function ContentPage({ category, articles }: ContentPageProps) {
         <section className="space-y-6">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900">Sigue leyendo</h2>
-            <p className="mt-1 text-sm text-slate-500">Mas lecturas relacionadas para profundizar en este tema.</p>
+            <p className="mt-1 text-sm text-slate-500">Más lecturas relacionadas para profundizar en este tema.</p>
           </div>
           <div className="grid gap-6 lg:grid-cols-3">
             {editorialPicks.map((article) => (

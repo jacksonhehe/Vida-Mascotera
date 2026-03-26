@@ -71,9 +71,10 @@ create table if not exists public.contact_messages (
 
 create table if not exists public.user_favorites (
   user_id uuid references auth.users(id) on delete cascade,
-  article_id text not null,
+  item_id text not null,
+  item_type text not null default 'article',
   created_at timestamptz not null default now(),
-  primary key (user_id, article_id)
+  primary key (user_id, item_type, item_id)
 );
 
 create table if not exists public.user_preferences (
@@ -82,6 +83,14 @@ create table if not exists public.user_preferences (
   favorite_topics text[] not null default '{}',
   newsletter boolean not null default true,
   updated_at timestamptz not null default now()
+);
+
+create table if not exists public.user_history (
+  user_id uuid references auth.users(id) on delete cascade,
+  item_id text not null,
+  item_type text not null default 'article',
+  visited_at timestamptz not null default now(),
+  primary key (user_id, item_type, item_id)
 );
 
 create or replace function public.handle_new_user()
@@ -134,31 +143,37 @@ alter table public.contact_messages enable row level security;
 alter table public.profiles enable row level security;
 alter table public.user_favorites enable row level security;
 alter table public.user_preferences enable row level security;
+alter table public.user_history enable row level security;
 
+drop policy if exists "contact_messages_insert_own" on public.contact_messages;
 create policy "contact_messages_insert_own"
 on public.contact_messages
 for insert
 to authenticated, anon
 with check (true);
 
+drop policy if exists "profiles_select_own" on public.profiles;
 create policy "profiles_select_own"
 on public.profiles
 for select
 to authenticated
 using (auth.uid() = id);
 
+drop policy if exists "profiles_admin_read_all" on public.profiles;
 create policy "profiles_admin_read_all"
 on public.profiles
 for select
 to authenticated
 using (public.is_admin());
 
+drop policy if exists "articles_public_read_published" on public.articles;
 create policy "articles_public_read_published"
 on public.articles
 for select
 to anon, authenticated
 using (status = 'published');
 
+drop policy if exists "articles_admin_manage" on public.articles;
 create policy "articles_admin_manage"
 on public.articles
 for all
@@ -168,12 +183,14 @@ with check (public.is_admin());
 
 -- Bucket expected by the admin panel:
 -- insert into storage.buckets (id, name, public) values ('article-images', 'article-images', true);
+drop policy if exists "article_images_public_read" on storage.objects;
 create policy "article_images_public_read"
 on storage.objects
 for select
 to public
 using (bucket_id = 'article-images');
 
+drop policy if exists "article_images_admin_insert" on storage.objects;
 create policy "article_images_admin_insert"
 on storage.objects
 for insert
@@ -183,6 +200,7 @@ with check (
   and public.is_admin()
 );
 
+drop policy if exists "article_images_admin_update" on storage.objects;
 create policy "article_images_admin_update"
 on storage.objects
 for update
@@ -196,6 +214,7 @@ with check (
   and public.is_admin()
 );
 
+drop policy if exists "article_images_admin_delete" on storage.objects;
 create policy "article_images_admin_delete"
 on storage.objects
 for delete
@@ -205,6 +224,7 @@ using (
   and public.is_admin()
 );
 
+drop policy if exists "user_favorites_manage_own" on public.user_favorites;
 create policy "user_favorites_manage_own"
 on public.user_favorites
 for all
@@ -212,8 +232,17 @@ to authenticated
 using (auth.uid() = user_id)
 with check (auth.uid() = user_id);
 
+drop policy if exists "user_preferences_manage_own" on public.user_preferences;
 create policy "user_preferences_manage_own"
 on public.user_preferences
+for all
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
+
+drop policy if exists "user_history_manage_own" on public.user_history;
+create policy "user_history_manage_own"
+on public.user_history
 for all
 to authenticated
 using (auth.uid() = user_id)

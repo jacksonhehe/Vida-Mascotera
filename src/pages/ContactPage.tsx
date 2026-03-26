@@ -25,11 +25,11 @@ function validate(form: ContactMessageInput) {
   }
 
   if (form.subject.trim().length < 4) {
-    errors.subject = 'Cuentanos un asunto un poco mas claro.'
+    errors.subject = 'Cuéntanos un asunto un poco más claro.'
   }
 
   if (form.message.trim().length < 20) {
-    errors.message = 'Tu mensaje necesita un poco mas de contexto para ayudarte bien.'
+    errors.message = 'Tu mensaje necesita un poco más de contexto para ayudarte bien.'
   }
 
   return errors
@@ -58,14 +58,14 @@ export function ContactPage() {
       setFeedback({
         tone: result.queued ? 'warning' : 'success',
         message: result.queued
-          ? 'Recibimos tu mensaje y lo enviaremos en cuanto tengamos una mejor conexion.'
+          ? 'Recibimos tu mensaje y lo enviaremos en cuanto tengamos una mejor conexión.'
           : 'Tu mensaje ya fue enviado. Gracias por escribirnos.',
       })
       setForm(initialForm)
     } catch {
       setFeedback({
         tone: 'warning',
-        message: 'No pudimos enviar tu mensaje ahora mismo. Intentalo otra vez en unos minutos.',
+        message: 'No pudimos enviar tu mensaje ahora mismo. Inténtalo otra vez en unos minutos.',
       })
     } finally {
       setSubmitting(false)
@@ -74,11 +74,11 @@ export function ContactPage() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <Seo canonicalPath="/contacto" description="Escribenos para consultas, colaboraciones o nuevas ideas relacionadas con Vida Mascotera." title="Contacto | Vida Mascotera" />
+      <Seo canonicalPath="/contacto" description="Escríbenos para consultas, colaboraciones o nuevas ideas relacionadas con Vida Mascotera." title="Contacto | Vida Mascotera" />
 
       <section className="rounded-[2.5rem] bg-brand-900 p-8 text-white shadow-soft md:p-10">
         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-100">Contacto</p>
-        <h1 className="mt-4 text-4xl font-semibold">Escribenos si tienes una consulta, una propuesta o una idea para compartir.</h1>
+        <h1 className="mt-4 text-4xl font-semibold">Escríbenos si tienes una consulta, una propuesta o una idea para compartir.</h1>
         <p className="mt-4 max-w-xl text-sm leading-7 text-brand-100/85">
           Este es el mejor lugar para contactarnos si quieres colaborar, hacer una consulta o conversar sobre un proyecto.
         </p>
@@ -89,11 +89,11 @@ export function ContactPage() {
           </div>
           <div className="flex items-center gap-3">
             <MapPin size={18} />
-            Atencion remota para marcas, medios y proyectos digitales de LATAM.
+            Atención remota para marcas, medios y proyectos digitales de LATAM.
           </div>
           <div className="flex items-center gap-3">
             <Sparkles size={18} />
-            Consultas, colaboraciones y proyectos relacionados con mascotas y contenido util.
+            Consultas, colaboraciones y proyectos relacionados con mascotas y contenido útil.
           </div>
         </div>
       </section>
@@ -101,10 +101,10 @@ export function ContactPage() {
       <section className="rounded-[2.5rem] bg-white p-8 shadow-soft md:p-10">
         <form className="space-y-5" noValidate onSubmit={handleSubmit}>
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-coral-600">Escribenos</p>
-            <h2 className="mt-3 text-3xl font-semibold text-slate-900">Cuentanos como podemos ayudarte</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-coral-600">Escríbenos</p>
+            <h2 className="mt-3 text-3xl font-semibold text-slate-900">Cuéntanos cómo podemos ayudarte</h2>
             <p className="mt-3 text-sm leading-7 text-slate-600">
-              Si quieres escribirnos por una colaboracion, una consulta o una idea, este es el mejor lugar para empezar.
+              Si quieres escribirnos por una colaboración, una consulta o una idea, este es el mejor lugar para empezar.
             </p>
           </div>
 

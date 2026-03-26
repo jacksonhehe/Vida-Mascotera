@@ -5,11 +5,14 @@ import type {
   ContactMessageRecord,
   ProductRecommendation,
   SyncQueueItem,
+  UserHistoryEntry,
   UserPreferences,
 } from '@/types/content'
 
 const DB_NAME = 'vida-mascotera-db'
-const DB_VERSION = 4
+const DB_VERSION = 5
+const CURRENT_PREFERENCES_KEY = 'current'
+const GUEST_SCOPE = 'guest'
 
 export const dbPromise = openDB(DB_NAME, DB_VERSION, {
   upgrade(db, oldVersion) {
@@ -57,8 +60,26 @@ export const dbPromise = openDB(DB_NAME, DB_VERSION, {
         db.createObjectStore('articleDrafts', { keyPath: 'id' })
       }
     }
+
+    if (oldVersion < 5) {
+      if (!db.objectStoreNames.contains('favoriteCollections')) {
+        db.createObjectStore('favoriteCollections', { keyPath: 'scopeKey' })
+      }
+
+      if (!db.objectStoreNames.contains('preferenceProfiles')) {
+        db.createObjectStore('preferenceProfiles', { keyPath: 'scopeKey' })
+      }
+
+      if (!db.objectStoreNames.contains('historyCollections')) {
+        db.createObjectStore('historyCollections', { keyPath: 'scopeKey' })
+      }
+    }
   },
 })
+
+function normalizeScopeKey(scopeKey?: string | null) {
+  return scopeKey ?? GUEST_SCOPE
+}
 
 export async function cacheArticles(articles: Article[]) {
   const db = await dbPromise
@@ -84,33 +105,68 @@ export async function getCachedProducts(): Promise<ProductRecommendation[]> {
   return db.getAll('products')
 }
 
-export async function saveFavorites(ids: string[]) {
+export async function saveFavoriteKeys(scopeKey: string | null | undefined, keys: string[]) {
   const db = await dbPromise
-  const tx = db.transaction('favorites', 'readwrite')
-  const existing = (await tx.store.getAllKeys()).map(String)
+  await db.put('favoriteCollections', { scopeKey: normalizeScopeKey(scopeKey), keys })
+}
 
-  await Promise.all(ids.map((id) => tx.store.put({ id })))
-  await Promise.all(existing.filter((id) => !ids.includes(id)).map((id) => tx.store.delete(id)))
-  await tx.done
+export async function getFavoriteKeys(scopeKey: string | null | undefined): Promise<string[]> {
+  const db = await dbPromise
+  const record = await db.get('favoriteCollections', normalizeScopeKey(scopeKey))
+  return record?.keys ?? []
+}
+
+export async function saveScopedPreferences(scopeKey: string | null | undefined, preferences: UserPreferences) {
+  const db = await dbPromise
+  await db.put('preferenceProfiles', { scopeKey: normalizeScopeKey(scopeKey), ...preferences })
+}
+
+export async function getScopedPreferences(scopeKey: string | null | undefined): Promise<UserPreferences | null> {
+  const db = await dbPromise
+  const record = await db.get('preferenceProfiles', normalizeScopeKey(scopeKey))
+
+  if (!record) {
+    return null
+  }
+
+  return {
+    favoriteTopics: record.favoriteTopics,
+    preferredPet: record.preferredPet,
+    newsletter: record.newsletter,
+  }
+}
+
+export async function saveHistoryEntries(scopeKey: string | null | undefined, history: UserHistoryEntry[]) {
+  const db = await dbPromise
+  await db.put('historyCollections', { scopeKey: normalizeScopeKey(scopeKey), entries: history })
+}
+
+export async function getHistoryEntries(scopeKey: string | null | undefined): Promise<UserHistoryEntry[]> {
+  const db = await dbPromise
+  const record = await db.get('historyCollections', normalizeScopeKey(scopeKey))
+  return record?.entries ?? []
+}
+
+export async function saveFavorites(ids: string[]) {
+  await saveFavoriteKeys(GUEST_SCOPE, ids)
 }
 
 export async function getFavorites(): Promise<string[]> {
-  const db = await dbPromise
-  const records = await db.getAll('favorites')
-  return records.map((record) => String(record.id))
+  return getFavoriteKeys(GUEST_SCOPE)
 }
 
 export async function savePreferences(preferences: UserPreferences) {
   const db = await dbPromise
-  await db.put('preferences', { id: 'current', ...preferences })
+  await db.put('preferences', { id: CURRENT_PREFERENCES_KEY, ...preferences })
+  await saveScopedPreferences(GUEST_SCOPE, preferences)
 }
 
 export async function getStoredPreferences(): Promise<UserPreferences | null> {
   const db = await dbPromise
-  const record = await db.get('preferences', 'current')
+  const record = await db.get('preferences', CURRENT_PREFERENCES_KEY)
 
   if (!record) {
-    return null
+    return getScopedPreferences(GUEST_SCOPE)
   }
 
   return {

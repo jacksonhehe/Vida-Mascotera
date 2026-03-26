@@ -3,9 +3,9 @@ import { Button } from '@/components/common/Button'
 
 export function HeroSection() {
   const featureItems = [
-    { label: 'Guias claras para el dia a dia', Icon: ShieldCheck },
-    { label: 'Comparativas utiles para elegir mejor', Icon: HeartHandshake },
-    { label: 'Ideas simples para cuidar con mas calma', Icon: Sparkles },
+    { label: 'Guías claras para el día a día', Icon: ShieldCheck },
+    { label: 'Comparativas útiles para elegir mejor', Icon: HeartHandshake },
+    { label: 'Ideas simples para cuidar con más calma', Icon: Sparkles },
   ]
 
   return (
@@ -14,12 +14,12 @@ export function HeroSection() {
       <div className="relative grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         <div className="space-y-6">
           <div className="space-y-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-700">Consejos y guias para cuidar mejor</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-700">Consejos y guías para cuidar mejor</p>
             <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-slate-900 md:text-6xl">
-              Ideas utiles para convivir mejor con tu perro o tu gato.
+              Ideas útiles para convivir mejor con tu perro o tu gato.
             </h1>
             <p className="max-w-2xl text-base leading-8 text-slate-600 md:text-lg">
-              En Vida Mascotera encuentras lecturas claras, comparativas sencillas y consejos practicos para el bienestar y la vida diaria con tu mascota.
+              En Vida Mascotera encuentras lecturas claras, comparativas sencillas y consejos prácticos para el bienestar y la vida diaria con tu mascota.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -40,10 +40,10 @@ export function HeroSection() {
 
         <div className="grid gap-4">
           <div className="rounded-[2rem] bg-brand-900 p-6 text-white">
-            <p className="text-sm uppercase tracking-[0.24em] text-brand-100">Lo mas importante</p>
-            <p className="mt-4 text-3xl font-semibold">Informacion clara para que cuidar a tu mascota se sienta mas simple.</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-brand-100">Lo más importante</p>
+            <p className="mt-4 text-3xl font-semibold">Información clara para que cuidar a tu mascota se sienta más simple.</p>
             <p className="mt-3 text-sm leading-7 text-brand-100/85">
-              Rutinas, bienestar, convivencia y decisiones cotidianas explicadas de forma cercana, practica y facil de aplicar.
+              Rutinas, bienestar, convivencia y decisiones cotidianas explicadas de forma cercana, práctica y fácil de aplicar.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">

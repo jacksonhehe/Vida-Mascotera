@@ -11,6 +11,7 @@ export type PetCategory =
 
 export type ArticleStatus = 'draft' | 'published' | 'archived'
 export type UserRole = 'admin' | 'editor' | 'reader'
+export type SavedItemType = 'article' | 'product'
 
 export interface NavItem {
   label: string
@@ -108,6 +109,11 @@ export interface UserPreferences {
   newsletter: boolean
 }
 
+export interface UserHistoryEntry {
+  key: string
+  visitedAt: string
+}
+
 export interface UserProfile {
   id: string
   email: string
@@ -119,7 +125,7 @@ export interface UserProfile {
 
 export interface SyncQueueItem {
   id: string
-  type: 'favorite' | 'preference' | 'contact_message'
+  type: 'favorite' | 'preference' | 'history' | 'contact_message'
   payload: unknown
   createdAt: string
 }
@@ -216,4 +222,23 @@ export interface SupabaseProfileDTO {
   full_name?: string | null
   avatar_url?: string | null
   role?: UserRole | null
+}
+
+export interface SupabaseUserFavoriteDTO {
+  item_id?: string | null
+  item_type?: SavedItemType | null
+  article_id?: string | null
+  created_at?: string | null
+}
+
+export interface SupabaseUserPreferenceDTO {
+  preferred_pet?: UserPreferences['preferredPet'] | null
+  favorite_topics?: PetCategory[] | null
+  newsletter?: boolean | null
+}
+
+export interface SupabaseUserHistoryDTO {
+  item_id?: string | null
+  item_type?: SavedItemType | null
+  visited_at?: string | null
 }

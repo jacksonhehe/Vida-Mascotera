@@ -1,17 +1,22 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { PetCategory, UserPreferences, UserProfile } from '@/types/content'
+import type { PetCategory, UserHistoryEntry, UserPreferences, UserProfile } from '@/types/content'
+import { uniqueKeys } from '@/utils/saved-items'
 
 interface AppState {
   favorites: string[]
+  history: UserHistoryEntry[]
   selectedCategory: PetCategory | 'todas'
   searchTerm: string
   preferences: UserPreferences
   isOffline: boolean
   profile: UserProfile | null
   hydrated: boolean
-  toggleFavorite: (id: string) => void
+  toggleFavorite: (key: string) => void
+  removeFavorite: (key: string) => void
   setFavorites: (favorites: string[]) => void
+  setHistory: (history: UserHistoryEntry[]) => void
+  recordHistory: (key: string) => void
   setSelectedCategory: (category: PetCategory | 'todas') => void
   setSearchTerm: (term: string) => void
   updatePreferences: (preferences: Partial<UserPreferences>) => void
@@ -31,19 +36,32 @@ export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       favorites: [],
+      history: [],
       selectedCategory: 'todas',
       searchTerm: '',
       preferences: defaultPreferences,
       isOffline: !navigator.onLine,
       profile: null,
       hydrated: false,
-      toggleFavorite: (id) =>
+      toggleFavorite: (key) =>
         set((state) => ({
-          favorites: state.favorites.includes(id)
-            ? state.favorites.filter((favorite) => favorite !== id)
-            : [...state.favorites, id],
+          favorites: state.favorites.includes(key)
+            ? state.favorites.filter((favorite) => favorite !== key)
+            : uniqueKeys([...state.favorites, key]),
         })),
       setFavorites: (favorites) => set({ favorites }),
+      removeFavorite: (key) =>
+        set((state) => ({
+          favorites: state.favorites.filter((favorite) => favorite !== key),
+        })),
+      setHistory: (history) => set({ history }),
+      recordHistory: (key) =>
+        set((state) => ({
+          history: [
+            { key, visitedAt: new Date().toISOString() },
+            ...state.history.filter((entry) => entry.key !== key),
+          ].slice(0, 24),
+        })),
       setSelectedCategory: (selectedCategory) => set({ selectedCategory }),
       setSearchTerm: (searchTerm) => set({ searchTerm }),
       updatePreferences: (preferences) =>
@@ -57,6 +75,7 @@ export const useAppStore = create<AppState>()(
       name: 'vida-mascotera-store',
       partialize: (state) => ({
         favorites: state.favorites,
+        history: state.history,
         preferences: state.preferences,
       }),
       onRehydrateStorage: () => (state) => {

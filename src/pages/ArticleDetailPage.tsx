@@ -1,10 +1,13 @@
 import { ArrowRight, Clock3, Heart, Sparkles } from 'lucide-react'
+import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArticleCard } from '@/components/cards/ArticleCard'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
+import { useAppStore } from '@/store/app-store'
 import { formatLongDate } from '@/utils/format'
+import { buildSavedItemKey } from '@/utils/saved-items'
 import type { Article, ProductRecommendation } from '@/types/content'
 
 interface ArticleDetailPageProps {
@@ -16,6 +19,11 @@ interface ArticleDetailPageProps {
 export function ArticleDetailPage({ article, products: _products, relatedArticles }: ArticleDetailPageProps) {
   const detailPath = article.category === 'comparativas' ? '/comparativas' : '/blog'
   const canonicalPath = article.category === 'comparativas' ? `/comparativas/${article.slug}` : `/blog/${article.slug}`
+  const recordHistory = useAppStore((state) => state.recordHistory)
+
+  useEffect(() => {
+    recordHistory(buildSavedItemKey('article', article.id))
+  }, [article.id, recordHistory])
 
   return (
     <article className="space-y-10">
@@ -43,7 +51,7 @@ export function ArticleDetailPage({ article, products: _products, relatedArticle
                 className="rounded-full bg-brand-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-800"
                 to={detailPath}
               >
-                {article.category === 'comparativas' ? 'Comparativa' : 'Articulo'}
+                {article.category === 'comparativas' ? 'Comparativa' : 'Artículo'}
               </Link>
               <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-sm text-slate-600">
                 <Clock3 className="h-4 w-4" />
@@ -69,7 +77,7 @@ export function ArticleDetailPage({ article, products: _products, relatedArticle
           <div className="relative min-h-[320px]">
             <img alt={article.title} className="h-full w-full object-cover" src={article.image} />
             <div className="absolute inset-x-6 bottom-6 rounded-[1.75rem] bg-slate-950/75 p-5 text-white backdrop-blur">
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Resumen rapido</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Resumen rápido</p>
               <ul className="mt-3 space-y-2 text-sm leading-6 text-white/90">
                 {article.takeaways.map((takeaway) => (
                   <li className="flex gap-3" key={takeaway}>
@@ -106,7 +114,7 @@ export function ArticleDetailPage({ article, products: _products, relatedArticle
                       <th className="px-4">Criterio</th>
                       <th className="px-4">{article.comparisonTable.optionALabel}</th>
                       <th className="px-4">{article.comparisonTable.optionBLabel}</th>
-                      <th className="px-4">Que conviene mirar</th>
+                      <th className="px-4">Qué conviene mirar</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -131,12 +139,12 @@ export function ArticleDetailPage({ article, products: _products, relatedArticle
               <Heart className="h-4 w-4" />
               Vida Mascotera
             </div>
-            <h2 className="mt-5 text-2xl font-semibold">Una buena lectura debe darte ideas claras para poner en practica.</h2>
+            <h2 className="mt-5 text-2xl font-semibold">Una buena lectura debe darte ideas claras para poner en práctica.</h2>
             <p className="mt-4 text-sm leading-7 text-brand-50/90">
-              Reunimos guias y comparativas para ayudarte a entender mejor este tema y tomar decisiones mas simples en el dia a dia.
+              Reunimos guías y comparativas para ayudarte a entender mejor este tema y tomar decisiones más simples en el día a día.
             </p>
             <Button className="mt-6 w-full" to="/contacto" variant="secondary">
-              Consultar una colaboracion
+              Consultar una colaboración
             </Button>
           </div>
         </aside>

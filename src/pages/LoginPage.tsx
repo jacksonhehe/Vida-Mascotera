@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ArrowRight, KeyRound, Mail, ShieldCheck, Sparkles, UserRound } from 'lucide-react'
+import { ArrowRight, Heart, KeyRound, Mail, Sparkles, UserRound } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
@@ -50,7 +50,7 @@ function resolveRedirectPath(role: UserRole | null, fallbackPath: string | null)
     return '/blog'
   }
 
-  return '/'
+  return '/mi-cuenta'
 }
 
 function getUnavailableMessage() {
@@ -145,40 +145,53 @@ export function LoginPage() {
     <div className="min-h-screen bg-cream-50 px-4 py-10 sm:px-6 lg:px-8">
       <Seo
         canonicalPath="/login"
-        description="Accede o crea tu cuenta de Vida Mascotera para guardar favoritos, preferencias y seguir disfrutando del contenido."
+        description="Accede o crea tu cuenta de Vida Mascotera para guardar favoritos, volver rápido a tus lecturas y recibir una experiencia más útil para ti."
         title="Acceso a tu cuenta | Vida Mascotera"
       />
-      <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+
+      <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.92fr_1.08fr]">
         <section className="overflow-hidden rounded-[2.5rem] bg-brand-900 p-8 text-white shadow-soft md:p-12">
           <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-brand-50">
             <Sparkles className="h-4 w-4" />
-            Tu cuenta Vida Mascotera
-          </p>
-          <h1 className="mt-8 max-w-xl text-5xl font-semibold tracking-tight text-white">
-            Entra o crea tu cuenta para seguir cuidando mejor a tu mascota
-          </h1>
-          <p className="mt-5 max-w-xl text-base leading-8 text-brand-50/90">
-            Guarda tus contenidos favoritos, vuelve a tus recomendaciones y mantén tu experiencia siempre a mano.
+            Tu espacio en Vida Mascotera
           </p>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <h1 className="mt-8 max-w-xl text-5xl font-semibold tracking-tight text-white">
+            Inicia sesión para guardar lo que te interesa y volver más rápido.
+          </h1>
+
+          <p className="mt-5 max-w-xl text-base leading-8 text-brand-50/90">
+            Guarda favoritos y vuelve más rápido a lo que ya te resultó útil.
+          </p>
+
+          <div className="mt-10 grid gap-4">
             {[
-              'Acceso sencillo con correo y contraseña.',
-              'Creación de cuenta en pocos pasos.',
-              'Tus contenidos y preferencias siempre a mano.',
-              'Tu experiencia disponible cuando vuelvas.',
-            ].map((item) => (
-              <div className="rounded-[1.75rem] border border-white/15 bg-white/10 p-5" key={item}>
-                <p className="text-sm leading-7 text-brand-50">{item}</p>
+              {
+                title: 'Favoritos siempre a mano',
+                body: 'Guarda artículos, comparativas y recomendaciones para volver cuando quieras.',
+                Icon: Heart,
+              },
+              {
+                title: 'Contenido más útil para ti',
+                body: 'Ajusta tus intereses y encuentra lecturas más alineadas con tu mascota y tu rutina.',
+                Icon: Sparkles,
+              },
+            ].map(({ title, body, Icon }) => (
+              <div className="rounded-[1.75rem] border border-white/15 bg-white/10 p-5" key={title}>
+                <Icon className="h-5 w-5 text-brand-50" />
+                <h2 className="mt-4 text-lg font-semibold text-white">{title}</h2>
+                <p className="mt-2 text-sm leading-7 text-brand-50/90">{body}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section className="rounded-[2.5rem] bg-white p-8 shadow-soft md:p-10">
-          <Link className="text-sm font-semibold text-brand-700 hover:text-brand-900" to="/">
-            Volver al sitio
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link className="text-sm font-semibold text-brand-700 hover:text-brand-900" to="/">
+              Volver al sitio
+            </Link>
+          </div>
 
           <div className="mt-5 inline-flex rounded-full bg-slate-100 p-1">
             <button
@@ -198,12 +211,12 @@ export function LoginPage() {
           </div>
 
           <h2 className="mt-5 text-4xl font-semibold tracking-tight text-slate-900">
-            {mode === 'signin' ? 'Bienvenido de nuevo' : 'Crea tu cuenta'}
+            {mode === 'signin' ? 'Entra a tu cuenta' : 'Crea tu cuenta'}
           </h2>
-          <p className="mt-4 text-base leading-8 text-slate-600">
+          <p className="mt-3 max-w-xl text-base leading-8 text-slate-600">
             {mode === 'signin'
-              ? 'Accede con tu correo y contraseña para volver a tu cuenta.'
-              : 'Completa tus datos para empezar a guardar tus preferencias y seguir tu contenido favorito.'}
+              ? 'Accede con tu correo y contraseña para volver a tus favoritos, tus preferencias y tus lecturas recientes.'
+              : 'Completa tus datos para empezar a guardar tus intereses y tener una experiencia más útil dentro de la web.'}
           </p>
 
           {status === 'unavailable' ? (
@@ -292,22 +305,6 @@ export function LoginPage() {
             </div>
           ) : null}
 
-          <div className="mt-8 rounded-[1.75rem] bg-slate-50 p-5">
-            <div className="flex items-start gap-3">
-              <ShieldCheck className="mt-1 h-5 w-5 text-brand-700" />
-              <div>
-                <p className="text-sm font-semibold text-slate-900">Acceso seguro y simple</p>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Entra con tus datos y sigue disfrutando de Vida Mascotera.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <p className="mt-6 inline-flex items-center gap-2 text-sm text-slate-500">
-            <ArrowRight className="h-4 w-4" />
-            Si acabas de crear tu cuenta, revisa tu correo por si necesitas confirmar el acceso.
-          </p>
         </section>
       </div>
     </div>

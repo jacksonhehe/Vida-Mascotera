@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ChevronDown, Heart, LogOut, Menu, PawPrint, ShieldCheck, User, X } from 'lucide-react'
+import { ChevronDown, Heart, Menu, PawPrint, ShieldCheck, User, X } from 'lucide-react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { navigationItems } from '@/lib/constants'
@@ -11,14 +11,13 @@ const primaryNavigation = [
   { label: 'Inicio', path: '/' },
   { label: 'Blog', path: '/blog' },
   { label: 'Comparativas', path: '/comparativas' },
-  { label: 'Contacto', path: '/contacto' },
 ]
 
 export function MainLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [exploreOpen, setExploreOpen] = useState(false)
   const favoritesCount = useAppStore((state) => state.favorites.length)
-  const { role, status, signOut } = useAuth()
+  const { role, status } = useAuth()
 
   const exploreItems = useMemo(
     () => navigationItems.filter((item) => ['perros', 'gatos', 'alimentacion', 'salud', 'accesorios'].includes(item.category)),
@@ -78,23 +77,23 @@ export function MainLayout() {
               <div
                 className={cn(
                   'absolute left-0 top-full z-50 w-80 pt-3 transition duration-150',
-                  exploreOpen ? 'visible opacity-100' : 'invisible opacity-0 pointer-events-none',
+                  exploreOpen ? 'visible opacity-100' : 'pointer-events-none invisible opacity-0',
                 )}
               >
                 <div className="rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-soft">
-                <div className="grid gap-2">
-                  {exploreItems.map((item) => (
-                    <Link
-                      className="rounded-2xl px-4 py-3 transition hover:bg-cream-50"
-                      key={item.path}
-                      onClick={() => setExploreOpen(false)}
-                      to={item.path}
-                    >
-                      <p className="text-sm font-semibold text-slate-900">{item.label}</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-500">{item.description}</p>
-                    </Link>
-                  ))}
-                </div>
+                  <div className="grid gap-2">
+                    {exploreItems.map((item) => (
+                      <Link
+                        className="rounded-2xl px-4 py-3 transition hover:bg-cream-50"
+                        key={item.path}
+                        onClick={() => setExploreOpen(false)}
+                        to={item.path}
+                      >
+                        <p className="text-sm font-semibold text-slate-900">{item.label}</p>
+                        <p className="mt-1 text-sm leading-6 text-slate-500">{item.description}</p>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -104,7 +103,7 @@ export function MainLayout() {
             <Link
               aria-label={`Favoritos: ${favoritesCount}`}
               className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-600 shadow-sm transition hover:text-brand-900"
-              to="/login"
+              to={status === 'authenticated' ? '/favoritos' : '/login'}
             >
               <div className="relative">
                 <Heart className="h-5 w-5" />
@@ -118,16 +117,19 @@ export function MainLayout() {
 
             {status === 'authenticated' ? (
               <div className="hidden items-center gap-2 lg:flex">
+                <Button to="/para-ti" variant="ghost">
+                  <span className="whitespace-nowrap">Para ti</span>
+                </Button>
+                <Button className="whitespace-nowrap" to="/mi-cuenta" variant="secondary">
+                  <User className="mr-2 h-4 w-4" />
+                  Mi cuenta
+                </Button>
                 {role === 'admin' ? (
-                  <Button to="/admin/articulos" variant="secondary">
+                  <Button className="whitespace-nowrap" to="/admin/articulos" variant="ghost">
                     <ShieldCheck className="mr-2 h-4 w-4" />
                     Panel
                   </Button>
                 ) : null}
-                <Button onClick={() => void signOut()} variant="ghost">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Salir
-                </Button>
               </div>
             ) : (
               <div className="hidden lg:block">
@@ -191,14 +193,23 @@ export function MainLayout() {
 
               {status === 'authenticated' ? (
                 <>
+                  <Button className="mt-2" to="/mi-cuenta" variant="secondary">
+                    Mi cuenta
+                  </Button>
+                  <Button className="mt-2" to="/favoritos" variant="secondary">
+                    Favoritos
+                  </Button>
+                  <Button className="mt-2" to="/para-ti" variant="secondary">
+                    Para ti
+                  </Button>
+                  <Button className="mt-2" to="/historial" variant="secondary">
+                    Historial
+                  </Button>
                   {role === 'admin' ? (
                     <Button className="mt-2" to="/admin/articulos" variant="secondary">
                       Panel editorial
                     </Button>
                   ) : null}
-                  <Button className="mt-2" onClick={() => void signOut()} variant="ghost">
-                    Cerrar sesión
-                  </Button>
                 </>
               ) : (
                 <Button className="mt-2" to="/login" variant="secondary">
@@ -209,17 +220,23 @@ export function MainLayout() {
           </nav>
         )}
       </header>
+
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Outlet />
       </main>
+
       <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_1fr_1fr] lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.25fr_0.9fr_0.85fr] lg:px-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">Vida Mascotera</h3>
+            <div>
+              <h3 className="text-xl font-semibold">Vida Mascotera</h3>
+              <p className="mt-1 text-sm uppercase tracking-[0.2em] text-slate-400">Cuidado, hogar y bienestar pet</p>
+            </div>
             <p className="max-w-md text-sm leading-7 text-slate-600">
-              Un espacio editorial para acompañarte con guías, comparativas y recomendaciones que hacen más fácil cuidar a quienes forman parte de tu familia.
+              Guías, comparativas y lecturas prácticas para cuidar mejor a tu perro o tu gato sin perder tiempo en ruido.
             </p>
           </div>
+
           <div className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Explora</p>
             {navigationItems.slice(1, 8).map((item) => (
@@ -228,11 +245,11 @@ export function MainLayout() {
               </NavLink>
             ))}
           </div>
+
           <div className="space-y-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Contacto</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Hablemos</p>
             <p className="text-sm text-slate-600">hola@vidamascotera.com</p>
-            <p className="text-sm text-slate-600">Colaboraciones editoriales, campañas afines y proyectos de marca.</p>
-            <p className="text-sm text-slate-600">Una experiencia preparada para crecer con perfiles, favoritos y contenido real.</p>
+            <p className="text-sm leading-7 text-slate-600">Escríbenos si quieres proponer una colaboración, compartir una idea o resolver una duda.</p>
           </div>
         </div>
       </footer>

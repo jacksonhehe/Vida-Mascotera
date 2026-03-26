@@ -1,8 +1,16 @@
-import { ArrowUpRight, Star } from 'lucide-react'
+import { ArrowUpRight, Heart, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { ProductRecommendation } from '@/types/content'
+import { useAppStore } from '@/store/app-store'
+import { buildSavedItemKey } from '@/utils/saved-items'
+import { cn } from '@/utils/cn'
 
 export function ProductCard({ product }: { product: ProductRecommendation }) {
+  const favorites = useAppStore((state) => state.favorites)
+  const toggleFavorite = useAppStore((state) => state.toggleFavorite)
+  const favoriteKey = buildSavedItemKey('product', product.id)
+  const isFavorite = favorites.includes(favoriteKey)
+
   return (
     <article className="overflow-hidden rounded-[1.75rem] border border-slate-200/70 bg-white shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-xl">
       <div className="relative">
@@ -10,6 +18,17 @@ export function ProductCard({ product }: { product: ProductRecommendation }) {
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-800 backdrop-blur">
           {product.badge}
         </div>
+        <button
+          aria-label={isFavorite ? 'Quitar de favoritos' : 'Guardar en favoritos'}
+          className={cn(
+            'absolute right-4 top-4 rounded-full p-2 transition backdrop-blur',
+            isFavorite ? 'bg-coral-100 text-coral-600' : 'bg-white/90 text-slate-500',
+          )}
+          onClick={() => toggleFavorite(favoriteKey)}
+          type="button"
+        >
+          <Heart className={cn('h-4 w-4', isFavorite && 'fill-current')} />
+        </button>
       </div>
       <div className="space-y-4 p-6">
         <div className="flex items-center justify-between gap-4">

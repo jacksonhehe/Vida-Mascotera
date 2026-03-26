@@ -2,13 +2,15 @@ import { ArrowUpRight, Heart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Article } from '@/types/content'
 import { useAppStore } from '@/store/app-store'
+import { buildSavedItemKey } from '@/utils/saved-items'
 import { cn } from '@/utils/cn'
 import { formatLongDate } from '@/utils/format'
 
 export function ArticleCard({ article }: { article: Article }) {
   const favorites = useAppStore((state) => state.favorites)
   const toggleFavorite = useAppStore((state) => state.toggleFavorite)
-  const isFavorite = favorites.includes(article.id)
+  const favoriteKey = buildSavedItemKey('article', article.id)
+  const isFavorite = favorites.includes(favoriteKey)
   const detailPath = article.category === 'comparativas' ? `/comparativas/${article.slug}` : `/blog/${article.slug}`
 
   return (
@@ -29,7 +31,7 @@ export function ArticleCard({ article }: { article: Article }) {
               'rounded-full p-2 transition backdrop-blur',
               isFavorite ? 'bg-coral-100 text-coral-600' : 'bg-white/90 text-slate-500',
             )}
-            onClick={() => toggleFavorite(article.id)}
+            onClick={() => toggleFavorite(favoriteKey)}
             type="button"
           >
             <Heart className={cn('h-4 w-4', isFavorite && 'fill-current')} />

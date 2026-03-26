@@ -40,6 +40,22 @@ export function RequireRole({ allowedRoles }: { allowedRoles: UserRole[] }) {
   return <Outlet />
 }
 
+export function RequireAuth() {
+  const location = useLocation()
+  const { status } = useAuth()
+
+  if (status === 'loading') {
+    return <AccessLoadingScreen />
+  }
+
+  if (status === 'unauthenticated' || status === 'unavailable') {
+    const next = `${location.pathname}${location.search}${location.hash}`
+    return <Navigate replace to={`/login?next=${encodeURIComponent(next)}`} />
+  }
+
+  return <Outlet />
+}
+
 export function AccessDeniedPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-cream-50 px-4">
