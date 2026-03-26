@@ -66,6 +66,7 @@ export function AdminArticleEditorPage() {
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'pending'>('idle')
   const [notice, setNotice] = useState<string | null>(null)
   const [slugTouched, setSlugTouched] = useState(false)
+  const [activeTab, setActiveTab] = useState<'editor' | 'preview'>('editor')
   const debounceRef = useRef<number | null>(null)
 
   useEffect(() => {
@@ -204,8 +205,32 @@ export function AdminArticleEditorPage() {
 
       {notice ? <StatusBanner message={notice} tone="info" /> : null}
 
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <section className="space-y-6 rounded-[2rem] bg-white p-6 shadow-soft">
+      <div className="space-y-4">
+        <div className="inline-flex rounded-full bg-white p-1 shadow-soft">
+          <button
+            aria-pressed={activeTab === 'editor'}
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              activeTab === 'editor' ? 'bg-brand-900 text-white' : 'text-slate-600 hover:bg-slate-100'
+            }`}
+            onClick={() => setActiveTab('editor')}
+            type="button"
+          >
+            Editor
+          </button>
+          <button
+            aria-pressed={activeTab === 'preview'}
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              activeTab === 'preview' ? 'bg-brand-900 text-white' : 'text-slate-600 hover:bg-slate-100'
+            }`}
+            onClick={() => setActiveTab('preview')}
+            type="button"
+          >
+            Vista previa
+          </button>
+        </div>
+
+        {activeTab === 'editor' ? (
+          <section className="space-y-6 rounded-[2rem] bg-white p-6 shadow-soft">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-semibold text-slate-900">{id ? 'Editar artículo' : 'Nuevo artículo'}</h1>
@@ -284,7 +309,7 @@ export function AdminArticleEditorPage() {
                 <option value="gatos">Gatos</option>
                 <option value="alimentacion">Alimentación</option>
                 <option value="salud">Salud</option>
-                <option value="accesorios">Accesorios</option>
+                <option value="accesorios">Guias de compra</option>
                 <option value="comparativas">Comparativas</option>
                 <option value="blog">Blog</option>
               </select>
@@ -373,7 +398,7 @@ export function AdminArticleEditorPage() {
             </div>
 
             {article.body.map((block, index) => (
-              <div className="rounded-[1.5rem] border border-slate-200 p-4" key={`${block.title}-${index}`}>
+              <div className="rounded-[1.5rem] border border-slate-200 p-4" key={index}>
                 <div className="flex items-center justify-between gap-3">
                   <input
                     className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
@@ -427,17 +452,18 @@ export function AdminArticleEditorPage() {
               />
             </label>
           </div>
-        </section>
-
-        <section className="space-y-4">
-          <div className="sticky top-6 rounded-[2rem] bg-white p-4 shadow-soft">
-            <div className="mb-4 flex items-center gap-3 text-sm text-slate-500">
-              <ImagePlus className="h-4 w-4" />
-              Vista previa editorial
+          </section>
+        ) : (
+          <section className="space-y-4">
+            <div className="rounded-[2rem] bg-white p-4 shadow-soft">
+              <div className="mb-4 flex items-center gap-3 text-sm text-slate-500">
+                <ImagePlus className="h-4 w-4" />
+                Vista previa editorial
+              </div>
+              <ArticleDetailPage article={previewArticle} products={products} relatedArticles={[]} />
             </div>
-            <ArticleDetailPage article={previewArticle} products={products} relatedArticles={[]} />
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </div>
   )

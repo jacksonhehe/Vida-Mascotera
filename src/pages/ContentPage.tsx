@@ -1,16 +1,14 @@
 import { useEffect, useMemo } from 'react'
 import { ArticleCard } from '@/components/cards/ArticleCard'
-import { ProductCard } from '@/components/cards/ProductCard'
 import { Seo } from '@/components/common/Seo'
 import { PageHero } from '@/components/sections/PageHero'
 import { categoryCopy } from '@/lib/constants'
 import { useAppStore } from '@/store/app-store'
-import type { Article, PetCategory, ProductRecommendation } from '@/types/content'
+import type { Article, PetCategory } from '@/types/content'
 
 interface ContentPageProps {
   category: Exclude<PetCategory, 'inicio' | 'contacto'>
   articles: Article[]
-  products: ProductRecommendation[]
 }
 
 const categoryPaths: Record<Exclude<PetCategory, 'inicio' | 'contacto'>, string> = {
@@ -23,7 +21,7 @@ const categoryPaths: Record<Exclude<PetCategory, 'inicio' | 'contacto'>, string>
   blog: '/blog',
 }
 
-export function ContentPage({ category, articles, products }: ContentPageProps) {
+export function ContentPage({ category, articles }: ContentPageProps) {
   const copy = categoryCopy[category]
   const selectedCategory = useAppStore((state) => state.selectedCategory)
   const searchTerm = useAppStore((state) => state.searchTerm)
@@ -51,18 +49,22 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
     [articles, category, searchTerm, selectedCategory],
   )
 
-  const filteredProducts = useMemo(
-    () => products.filter((product) => product.category === category || category === 'comparativas'),
-    [category, products],
+  const editorialPicks = useMemo(
+    () =>
+      articles
+        .filter((article) => article.category !== category)
+        .filter((article) => (category === 'comparativas' ? article.category === 'blog' : article.category === 'comparativas' || article.category === 'blog'))
+        .slice(0, 3),
+    [articles, category],
   )
 
   const emptyTitle =
-    searchTerm.length > 0 ? 'No encontramos resultados con esa búsqueda' : 'Aún no tenemos contenido visible en esta sección'
+    searchTerm.length > 0 ? 'No encontramos resultados con esa busqueda' : 'Aun no tenemos contenido visible en esta seccion'
 
   const emptyBody =
     searchTerm.length > 0
-      ? 'Prueba con otra palabra clave o vuelve a la vista completa para descubrir más lecturas y comparativas.'
-      : 'Estamos preparando nuevas publicaciones para esta categoría. Mientras tanto, puedes explorar el blog o nuestras comparativas.'
+      ? 'Prueba con otra palabra clave o vuelve a la vista completa para descubrir mas lecturas y comparativas.'
+      : 'Estamos preparando nuevas publicaciones para esta categoria. Mientras tanto, puedes explorar el blog o nuestras comparativas.'
 
   return (
     <div className="space-y-10">
@@ -83,7 +85,7 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
             value={searchTerm}
           />
           <label className="sr-only" htmlFor="content-filter">
-            Filtrar categoría
+            Filtrar categoria
           </label>
           <select
             className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
@@ -91,7 +93,7 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
             onChange={(event) => setSelectedCategory(event.target.value as PetCategory | 'todas')}
             value={selectedCategory}
           >
-            <option value="todas">Mostrar solo esta sección</option>
+            <option value="todas">Mostrar solo esta seccion</option>
             <option value={category}>{category}</option>
             <option value="blog">blog</option>
             <option value="comparativas">comparativas</option>
@@ -103,7 +105,7 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
         <div className="flex items-center justify-between gap-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900">Contenido relacionado</h2>
-            <p className="mt-1 text-sm text-slate-500">Encuentra ideas útiles para esta etapa, necesidad o tipo de mascota.</p>
+            <p className="mt-1 text-sm text-slate-500">Encuentra ideas utiles para esta etapa, necesidad o tipo de mascota.</p>
           </div>
           <p className="text-sm text-slate-500">{filteredArticles.length} resultados</p>
         </div>
@@ -120,12 +122,15 @@ export function ContentPage({ category, articles, products }: ContentPageProps) 
         </div>
       </section>
 
-      {filteredProducts.length > 0 ? (
+      {editorialPicks.length > 0 ? (
         <section className="space-y-6">
-          <h2 className="text-2xl font-semibold text-slate-900">Selección recomendada</h2>
+          <div>
+            <h2 className="text-2xl font-semibold text-slate-900">Sigue leyendo</h2>
+            <p className="mt-1 text-sm text-slate-500">Una seleccion editorial para ampliar contexto sin empujar recomendaciones de compra.</p>
+          </div>
           <div className="grid gap-6 lg:grid-cols-3">
-            {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {editorialPicks.map((article) => (
+              <ArticleCard article={article} key={article.id} />
             ))}
           </div>
         </section>

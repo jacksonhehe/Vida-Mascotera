@@ -53,7 +53,7 @@ export function ShellPage({ page }: { page: ShellPageName }) {
       {(() => {
         switch (page) {
           case 'home':
-            return <HomePage articles={articles} products={products} />
+            return <HomePage articles={articles} />
           case 'blog':
             return <BlogPage articles={articles} />
           case 'article-detail':
@@ -82,7 +82,7 @@ export function ShellPage({ page }: { page: ShellPageName }) {
           case 'salud':
           case 'accesorios':
           case 'comparativas':
-            return <ContentPage articles={articles} category={page} products={products} />
+            return <ContentPage articles={articles} category={page} />
           default:
             return <NotFoundPage />
         }

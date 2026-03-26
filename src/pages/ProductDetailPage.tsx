@@ -25,7 +25,7 @@ export function ProductDetailPage({ product, relatedProducts }: ProductDetailPag
       <Breadcrumbs
         items={[
           { label: 'Inicio', to: '/' },
-          { label: 'Recomendaciones', to: '/accesorios' },
+          { label: 'Guias de compra', to: '/accesorios' },
           { label: product.name },
         ]}
       />
@@ -72,7 +72,7 @@ export function ProductDetailPage({ product, relatedProducts }: ProductDetailPag
               <h2 className="mt-2 text-3xl font-semibold text-slate-900">Otras recomendaciones de la misma línea</h2>
             </div>
             <Link className="inline-flex items-center gap-2 text-sm font-semibold text-brand-800" to="/accesorios">
-              Volver a accesorios
+              Volver a guias de compra
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

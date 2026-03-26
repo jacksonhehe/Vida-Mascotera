@@ -16,6 +16,7 @@ const primaryNavigation = [
 
 export function MainLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [exploreOpen, setExploreOpen] = useState(false)
   const favoritesCount = useAppStore((state) => state.favorites.length)
   const { role, status, signOut } = useAuth()
 
@@ -54,27 +55,46 @@ export function MainLayout() {
               </NavLink>
             ))}
 
-            <div className="group relative">
+            <div
+              className="relative"
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  setExploreOpen(false)
+                }
+              }}
+              onMouseEnter={() => setExploreOpen(true)}
+              onMouseLeave={() => setExploreOpen(false)}
+            >
               <button
-                aria-expanded="false"
+                aria-expanded={exploreOpen}
+                aria-haspopup="true"
                 className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-white"
+                onClick={() => setExploreOpen((open) => !open)}
                 type="button"
               >
                 Explorar
                 <ChevronDown className="h-4 w-4" />
               </button>
-              <div className="invisible absolute left-0 top-full z-50 mt-3 w-80 rounded-[1.75rem] border border-slate-200 bg-white p-3 opacity-0 shadow-soft transition duration-150 group-hover:visible group-hover:opacity-100">
+              <div
+                className={cn(
+                  'absolute left-0 top-full z-50 w-80 pt-3 transition duration-150',
+                  exploreOpen ? 'visible opacity-100' : 'invisible opacity-0 pointer-events-none',
+                )}
+              >
+                <div className="rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-soft">
                 <div className="grid gap-2">
                   {exploreItems.map((item) => (
                     <Link
                       className="rounded-2xl px-4 py-3 transition hover:bg-cream-50"
                       key={item.path}
+                      onClick={() => setExploreOpen(false)}
                       to={item.path}
                     >
                       <p className="text-sm font-semibold text-slate-900">{item.label}</p>
                       <p className="mt-1 text-sm leading-6 text-slate-500">{item.description}</p>
                     </Link>
                   ))}
+                </div>
                 </div>
               </div>
             </div>

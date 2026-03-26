@@ -111,7 +111,7 @@ export function AdminArticlesPage() {
             <option value="gatos">Gatos</option>
             <option value="alimentacion">Alimentación</option>
             <option value="salud">Salud</option>
-            <option value="accesorios">Accesorios</option>
+            <option value="accesorios">Guias de compra</option>
             <option value="comparativas">Comparativas</option>
             <option value="blog">Blog</option>
           </select>
