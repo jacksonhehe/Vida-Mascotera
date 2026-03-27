@@ -203,15 +203,13 @@ async function replaceHistoryRemote(userId: string, history: UserHistoryEntry[])
     })
     .filter(Boolean)
 
-  const clearResult = await supabase.from('user_history').delete().eq('user_id', userId)
-  if (clearResult.error) {
-    throw clearResult.error
-  }
-
   if (payload.length > 0) {
-    const insertResult = await supabase.from('user_history').insert(payload)
-    if (insertResult.error) {
-      throw insertResult.error
+    const upsertResult = await supabase
+      .from('user_history')
+      .upsert(payload, { onConflict: 'user_id,item_type,item_id' })
+
+    if (upsertResult.error) {
+      throw upsertResult.error
     }
   }
 }

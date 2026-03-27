@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { ChevronDown, Heart, Menu, PawPrint, ShieldCheck, User, X } from 'lucide-react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { ChevronDown, Heart, Menu, PawPrint, Search, ShieldCheck, User, X } from 'lucide-react'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/common/Button'
 import { navigationItems } from '@/lib/constants'
 import { useAuth } from '@/providers/AuthProvider'
@@ -20,6 +20,7 @@ export function MainLayout() {
   const { role, status } = useAuth()
   const authReady = status !== 'loading'
   const isAuthenticated = status === 'authenticated'
+  const navigate = useNavigate()
 
   const exploreItems = useMemo(
     () => navigationItems.filter((item) => ['perros', 'gatos', 'alimentacion', 'salud', 'accesorios'].includes(item.category)),
@@ -102,6 +103,15 @@ export function MainLayout() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <button
+              aria-label="Buscar artículos"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-600 shadow-sm transition hover:text-brand-900"
+              onClick={() => navigate('/buscar')}
+              type="button"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+
             <Link
               aria-label={`Favoritos: ${favoritesCount}`}
               className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-600 shadow-sm transition hover:text-brand-900"

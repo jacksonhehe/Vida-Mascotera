@@ -11,6 +11,7 @@ import { ContentPage } from '@/pages/ContentPage'
 import { HomePage } from '@/pages/HomePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { ProductDetailPage } from '@/pages/ProductDetailPage'
+import { SearchPage } from '@/pages/SearchPage'
 
 type ShellPageName =
   | 'home'
@@ -23,6 +24,7 @@ type ShellPageName =
   | 'comparison-detail'
   | 'blog'
   | 'article-detail'
+  | 'buscar'
   | 'product-detail'
   | 'contacto'
   | '404'
@@ -56,6 +58,8 @@ export function ShellPage({ page }: { page: ShellPageName }) {
             return <HomePage articles={articles} />
           case 'blog':
             return <BlogPage articles={articles} />
+          case 'buscar':
+            return <SearchPage articles={articles} />
           case 'article-detail':
             return selectedArticle && selectedArticle.category !== 'comparativas' ? (
               <ArticleDetailPage article={selectedArticle} products={products} relatedArticles={relatedArticles} />

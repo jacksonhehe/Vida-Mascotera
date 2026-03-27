@@ -72,8 +72,18 @@ export function ContentPage({ category, articles }: ContentPageProps) {
       <PageHero
         emphasis={copy.emphasis}
         intro={copy.intro}
-        primaryCta={category === 'comparativas' ? { label: 'Ir al blog', to: '/blog' } : { label: 'Seguir leyendo', to: '/blog' }}
-        secondaryCta={category === 'comparativas' ? undefined : { label: 'Ver comparativas', to: '/comparativas' }}
+        primaryCta={
+          category === 'comparativas'
+            ? { label: 'Ir al blog', to: '/blog' }
+            : category === 'blog'
+              ? { label: 'Ver comparativas', to: '/comparativas' }
+              : { label: 'Seguir leyendo', to: '/blog' }
+        }
+        secondaryCta={
+          category === 'comparativas' || category === 'blog'
+            ? undefined
+            : { label: 'Ver comparativas', to: '/comparativas' }
+        }
         title={copy.title}
       />
 

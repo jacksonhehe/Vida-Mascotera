@@ -6,10 +6,15 @@ import type { Article } from '@/types/content'
 export function BlogPage({ articles }: { articles: Article[] }) {
   return (
     <div className="space-y-10">
-      <Seo canonicalPath="/blog" description="Guías, historias y consejos para el día a día con tu mascota." title="Blog Vida Mascotera | Guías y lecturas para el día a día" />
+      <Seo
+        canonicalPath="/blog"
+        description="Guías, historias y consejos para el día a día con tu mascota."
+        title="Blog Vida Mascotera | Guías y lecturas para el día a día"
+      />
       <PageHero
         emphasis="Guías para volver cuando necesites información clara y fácil de aplicar."
         intro="El blog de Vida Mascotera reúne lecturas prácticas sobre bienestar, convivencia, alimentación, cuidado y vida diaria con tu mascota."
+        primaryCta={{ label: 'Ver comparativas', to: '/comparativas' }}
         title="Consejos y lecturas útiles para el día a día"
       />
       {articles.length ? (

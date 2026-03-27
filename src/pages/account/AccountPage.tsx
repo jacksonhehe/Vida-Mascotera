@@ -1,4 +1,4 @@
-import { Heart, History, LogOut, PawPrint, Settings2, Sparkles } from 'lucide-react'
+import { Heart, History, LogOut, Settings2, Sparkles } from 'lucide-react'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
 import { useAppBootstrap } from '@/hooks/useAppBootstrap'
@@ -67,14 +67,6 @@ export function AccountPage() {
 
   const quickAccess: QuickAccessCard[] = [
     {
-      title: 'Favoritos',
-      body: favoritesCount ? `${favoritesCount} guardados para volver rápido cuando quieras.` : 'Guarda lecturas útiles para encontrarlas sin buscarlas otra vez.',
-      to: '/favoritos',
-      Icon: Heart,
-      accent: 'brand',
-      cta: 'Abrir',
-    },
-    {
       title: 'Para ti',
       body: 'Una selección pensada según tus temas y el tipo de mascota que más te interesa.',
       to: '/para-ti',
@@ -93,10 +85,10 @@ export function AccountPage() {
     {
       title: 'Historial',
       body: latestHistoryEntry ? latestHistoryEntry.title : 'Cuando empieces a leer, aquí tendrás una forma simple de volver.',
-      to: latestHistoryEntry?.to ?? '/historial',
+      to: '/historial',
       Icon: History,
       accent: 'slate',
-      cta: latestHistoryEntry ? 'Retomar' : 'Abrir',
+      cta: 'Ver historial',
       meta: latestHistoryEntry?.meta ?? `${history.length} lecturas recientes guardadas.`,
     },
   ]
@@ -109,73 +101,57 @@ export function AccountPage() {
         title="Mi cuenta | Vida Mascotera"
       />
 
-      <section className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
-        <div className="rounded-[2.5rem] bg-brand-900 p-7 text-white shadow-soft">
+      <section className="grid items-start gap-6 xl:grid-cols-[1.02fr_0.98fr]">
+        <div className="self-stretch rounded-[2.5rem] bg-brand-900 p-6 text-white shadow-soft">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-100">Mi cuenta</p>
-          <h1 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">{profile?.fullName ?? 'Comunidad Vida Mascotera'}</h1>
-          <p className="mt-4 max-w-2xl text-base leading-8 text-brand-50/90">
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">{profile?.fullName ?? 'Comunidad Vida Mascotera'}</h1>
+          <p className="mt-3 max-w-2xl text-base leading-8 text-brand-50/90">
             Aquí tienes a mano lo que más te interesa: tus favoritos, tus preferencias y una forma más rápida de volver a leer lo que te sirve.
           </p>
 
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.5rem] bg-white/10 p-4">
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-[1.5rem] bg-white/10 p-3.5">
               <p className="text-sm text-brand-100">Favoritos</p>
-              <p className="mt-2 text-2xl font-semibold text-white">{favoritesCount}</p>
+              <p className="mt-1.5 text-2xl font-semibold text-white">{favoritesCount}</p>
             </div>
-            <div className="rounded-[1.5rem] bg-white/10 p-4">
+            <div className="rounded-[1.5rem] bg-white/10 p-3.5">
               <p className="text-sm text-brand-100">Historial</p>
-              <p className="mt-2 text-2xl font-semibold text-white">{history.length}</p>
+              <p className="mt-1.5 text-2xl font-semibold text-white">{history.length}</p>
             </div>
-            <div className="rounded-[1.5rem] bg-white/10 p-4">
+            <div className="rounded-[1.5rem] bg-white/10 p-3.5">
               <p className="text-sm text-brand-100">Temas activos</p>
-              <p className="mt-2 text-2xl font-semibold text-white">{preferences.favoriteTopics.length}</p>
+              <p className="mt-1.5 text-2xl font-semibold text-white">{preferences.favoriteTopics.length}</p>
             </div>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-3">
             <Button to="/favoritos" variant="secondary">
               <Heart className="mr-2 h-4 w-4" />
               Ver favoritos
             </Button>
-            <Button to={latestHistoryEntry?.to ?? '/historial'} variant="secondary">
-              <History className="mr-2 h-4 w-4" />
-              {latestHistoryEntry ? 'Retomar lectura' : 'Ver historial'}
+            <Button to="/preferencias" variant="secondary">
+              <Settings2 className="mr-2 h-4 w-4" />
+              Ajustar preferencias
             </Button>
           </div>
         </div>
 
-        <div className="rounded-[2.5rem] bg-white p-7 shadow-soft">
+        <div className="rounded-[2.5rem] bg-white p-6 shadow-soft">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Tu perfil</p>
-          <div className="mt-5 space-y-4">
-            <div className="rounded-[1.5rem] bg-cream-50 p-5">
+          <div className="mt-4 space-y-3">
+            <div className="rounded-[1.5rem] bg-cream-50 p-4">
               <p className="text-sm text-slate-500">Correo</p>
               <p className="mt-2 text-lg font-semibold text-slate-900">{profile?.email}</p>
             </div>
-            <div className="rounded-[1.5rem] bg-cream-50 p-5">
+            <div className="rounded-[1.5rem] bg-cream-50 p-4">
               <p className="text-sm text-slate-500">Tu contexto principal</p>
               <p className="mt-2 text-lg font-semibold text-slate-900">{preferredPetCopy}</p>
-            </div>
-            <div className="rounded-[1.5rem] bg-cream-50 p-5">
-              <p className="text-sm text-slate-500">Temas guardados</p>
-              <p className="mt-2 text-lg font-semibold text-slate-900">{preferences.favoriteTopics.length} temas de interés</p>
-            </div>
-          </div>
-
-          <div className="mt-6 rounded-[1.5rem] border border-slate-200 p-5">
-            <div className="flex items-start gap-3">
-              <PawPrint className="mt-1 h-5 w-5 text-brand-700" />
-              <div>
-                <p className="text-sm font-semibold text-slate-900">Tu cuenta recuerda lo importante</p>
-                <p className="mt-2 text-sm leading-7 text-slate-600">
-                  Tus favoritos, tu historial y tus preferencias quedan listos para que volver a la web se sienta más simple.
-                </p>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {quickAccess.map(({ title, body, to, Icon, accent, cta, meta }) => (
           <div className="rounded-[2rem] bg-white p-6 shadow-soft" key={title}>
             <div
