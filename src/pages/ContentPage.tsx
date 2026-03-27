@@ -69,7 +69,13 @@ export function ContentPage({ category, articles }: ContentPageProps) {
   return (
     <div className="space-y-10">
       <Seo canonicalPath={categoryPaths[category]} description={copy.intro} title={`Vida Mascotera | ${copy.title}`} />
-      <PageHero emphasis={copy.emphasis} intro={copy.intro} title={copy.title} />
+      <PageHero
+        emphasis={copy.emphasis}
+        intro={copy.intro}
+        primaryCta={category === 'comparativas' ? { label: 'Ir al blog', to: '/blog' } : { label: 'Seguir leyendo', to: '/blog' }}
+        secondaryCta={category === 'comparativas' ? undefined : { label: 'Ver comparativas', to: '/comparativas' }}
+        title={copy.title}
+      />
 
       <section className="rounded-[2rem] bg-white p-6 shadow-soft">
         <div className="grid gap-4 md:grid-cols-[0.7fr_0.3fr]">

@@ -1,29 +1,57 @@
 import { HeartOff } from 'lucide-react'
+import { useEffect, useMemo } from 'react'
 import { ArticleCard } from '@/components/cards/ArticleCard'
 import { ProductCard } from '@/components/cards/ProductCard'
 import { Seo } from '@/components/common/Seo'
 import { useAppBootstrap } from '@/hooks/useAppBootstrap'
 import { useAppStore } from '@/store/app-store'
+import type { Article, ProductRecommendation } from '@/types/content'
 import { parseSavedItemKey } from '@/utils/saved-items'
 
 export function FavoritesPage() {
   const { articles, products } = useAppBootstrap()
   const favorites = useAppStore((state) => state.favorites)
   const removeFavorite = useAppStore((state) => state.removeFavorite)
+  const setFavorites = useAppStore((state) => state.setFavorites)
 
-  const favoriteArticles = favorites
-    .map(parseSavedItemKey)
-    .filter((item): item is { type: 'article' | 'product'; id: string } => Boolean(item))
-    .filter((item) => item.type === 'article')
-    .map((item) => articles.find((article) => article.id === item.id))
-    .filter(Boolean)
+  const { favoriteArticles, favoriteProducts, validKeys } = useMemo(() => {
+    const articleIds = new Set(articles.map((article) => article.id))
+    const productIds = new Set(products.map((product) => product.id))
+    const validKeys: string[] = []
+    const favoriteArticles: Article[] = []
+    const favoriteProducts: ProductRecommendation[] = []
 
-  const favoriteProducts = favorites
-    .map(parseSavedItemKey)
-    .filter((item): item is { type: 'article' | 'product'; id: string } => Boolean(item))
-    .filter((item) => item.type === 'product')
-    .map((item) => products.find((product) => product.id === item.id))
-    .filter(Boolean)
+    for (const favorite of favorites) {
+      const parsed = parseSavedItemKey(favorite)
+      if (!parsed) {
+        continue
+      }
+
+      if (parsed.type === 'article' && articleIds.has(parsed.id)) {
+        const article = articles.find((item) => item.id === parsed.id)
+        if (article) {
+          validKeys.push(`article:${parsed.id}`)
+          favoriteArticles.push(article)
+        }
+      }
+
+      if (parsed.type === 'product' && productIds.has(parsed.id)) {
+        const product = products.find((item) => item.id === parsed.id)
+        if (product) {
+          validKeys.push(`product:${parsed.id}`)
+          favoriteProducts.push(product)
+        }
+      }
+    }
+
+    return { favoriteArticles, favoriteProducts, validKeys }
+  }, [articles, favorites, products])
+
+  useEffect(() => {
+    if (favorites.length && validKeys.length !== favorites.length) {
+      setFavorites(validKeys)
+    }
+  }, [favorites.length, setFavorites, validKeys])
 
   return (
     <div className="space-y-8">

@@ -1,13 +1,28 @@
-import { Heart, LogOut, PawPrint, Settings2, Sparkles } from 'lucide-react'
+import { Heart, History, LogOut, PawPrint, Settings2, Sparkles } from 'lucide-react'
 import { Button } from '@/components/common/Button'
 import { Seo } from '@/components/common/Seo'
+import { useAppBootstrap } from '@/hooks/useAppBootstrap'
 import { useAuth } from '@/providers/AuthProvider'
 import { useAppStore } from '@/store/app-store'
+import type { LucideIcon } from 'lucide-react'
+import { formatLongDate } from '@/utils/format'
+import { parseSavedItemKey } from '@/utils/saved-items'
+
+interface QuickAccessCard {
+  title: string
+  body: string
+  to: string
+  Icon: LucideIcon
+  accent: 'brand' | 'mint' | 'cream' | 'slate'
+  cta: string
+  meta?: string
+}
 
 export function AccountPage() {
+  const { articles, products } = useAppBootstrap()
   const { profile, signOut } = useAuth()
   const favoritesCount = useAppStore((state) => state.favorites.length)
-  const historyCount = useAppStore((state) => state.history.length)
+  const history = useAppStore((state) => state.history)
   const preferences = useAppStore((state) => state.preferences)
 
   const preferredPetCopy =
@@ -17,6 +32,75 @@ export function AccountPage() {
         ? 'Principalmente perro'
         : 'Principalmente gato'
 
+  const latestHistoryEntry = history
+    .map((entry) => {
+      const parsed = parseSavedItemKey(entry.key)
+      if (!parsed) {
+        return null
+      }
+
+      if (parsed.type === 'article') {
+        const article = articles.find((item) => item.id === parsed.id)
+        if (!article) {
+          return null
+        }
+
+        return {
+          title: article.title,
+          meta: `Visto el ${formatLongDate(entry.visitedAt)}`,
+          to: article.category === 'comparativas' ? `/comparativas/${article.slug}` : `/blog/${article.slug}`,
+        }
+      }
+
+      const product = products.find((item) => item.id === parsed.id)
+      if (!product) {
+        return null
+      }
+
+      return {
+        title: product.name,
+        meta: `Visto el ${formatLongDate(entry.visitedAt)}`,
+        to: `/recomendaciones/${product.slug}`,
+      }
+    })
+    .find(Boolean)
+
+  const quickAccess: QuickAccessCard[] = [
+    {
+      title: 'Favoritos',
+      body: favoritesCount ? `${favoritesCount} guardados para volver rápido cuando quieras.` : 'Guarda lecturas útiles para encontrarlas sin buscarlas otra vez.',
+      to: '/favoritos',
+      Icon: Heart,
+      accent: 'brand',
+      cta: 'Abrir',
+    },
+    {
+      title: 'Para ti',
+      body: 'Una selección pensada según tus temas y el tipo de mascota que más te interesa.',
+      to: '/para-ti',
+      Icon: Sparkles,
+      accent: 'mint',
+      cta: 'Abrir',
+    },
+    {
+      title: 'Preferencias',
+      body: `${preferences.favoriteTopics.length} temas activos para ordenar mejor lo que ves.`,
+      to: '/preferencias',
+      Icon: Settings2,
+      accent: 'cream',
+      cta: 'Abrir',
+    },
+    {
+      title: 'Historial',
+      body: latestHistoryEntry ? latestHistoryEntry.title : 'Cuando empieces a leer, aquí tendrás una forma simple de volver.',
+      to: latestHistoryEntry?.to ?? '/historial',
+      Icon: History,
+      accent: 'slate',
+      cta: latestHistoryEntry ? 'Retomar' : 'Abrir',
+      meta: latestHistoryEntry?.meta ?? `${history.length} lecturas recientes guardadas.`,
+    },
+  ]
+
   return (
     <div className="space-y-8">
       <Seo
@@ -25,26 +109,42 @@ export function AccountPage() {
         title="Mi cuenta | Vida Mascotera"
       />
 
-      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[2.5rem] bg-brand-900 p-8 text-white shadow-soft md:p-10">
+      <section className="grid gap-6 xl:grid-cols-[1.02fr_0.98fr]">
+        <div className="rounded-[2.5rem] bg-brand-900 p-7 text-white shadow-soft">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-100">Mi cuenta</p>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight">{profile?.fullName ?? 'Comunidad Vida Mascotera'}</h1>
+          <h1 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">{profile?.fullName ?? 'Comunidad Vida Mascotera'}</h1>
           <p className="mt-4 max-w-2xl text-base leading-8 text-brand-50/90">
             Aquí tienes a mano lo que más te interesa: tus favoritos, tus preferencias y una forma más rápida de volver a leer lo que te sirve.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-[1.5rem] bg-white/10 p-4">
+              <p className="text-sm text-brand-100">Favoritos</p>
+              <p className="mt-2 text-2xl font-semibold text-white">{favoritesCount}</p>
+            </div>
+            <div className="rounded-[1.5rem] bg-white/10 p-4">
+              <p className="text-sm text-brand-100">Historial</p>
+              <p className="mt-2 text-2xl font-semibold text-white">{history.length}</p>
+            </div>
+            <div className="rounded-[1.5rem] bg-white/10 p-4">
+              <p className="text-sm text-brand-100">Temas activos</p>
+              <p className="mt-2 text-2xl font-semibold text-white">{preferences.favoriteTopics.length}</p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
             <Button to="/favoritos" variant="secondary">
               <Heart className="mr-2 h-4 w-4" />
               Ver favoritos
             </Button>
-            <Button to="/preferencias" variant="secondary">
-              <Settings2 className="mr-2 h-4 w-4" />
-              Ajustar preferencias
+            <Button to={latestHistoryEntry?.to ?? '/historial'} variant="secondary">
+              <History className="mr-2 h-4 w-4" />
+              {latestHistoryEntry ? 'Retomar lectura' : 'Ver historial'}
             </Button>
           </div>
         </div>
 
-        <div className="rounded-[2.5rem] bg-white p-8 shadow-soft md:p-10">
+        <div className="rounded-[2.5rem] bg-white p-7 shadow-soft">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Tu perfil</p>
           <div className="mt-5 space-y-4">
             <div className="rounded-[1.5rem] bg-cream-50 p-5">
@@ -60,42 +160,42 @@ export function AccountPage() {
               <p className="mt-2 text-lg font-semibold text-slate-900">{preferences.favoriteTopics.length} temas de interés</p>
             </div>
           </div>
+
+          <div className="mt-6 rounded-[1.5rem] border border-slate-200 p-5">
+            <div className="flex items-start gap-3">
+              <PawPrint className="mt-1 h-5 w-5 text-brand-700" />
+              <div>
+                <p className="text-sm font-semibold text-slate-900">Tu cuenta recuerda lo importante</p>
+                <p className="mt-2 text-sm leading-7 text-slate-600">
+                  Tus favoritos, tu historial y tus preferencias quedan listos para que volver a la web se sienta más simple.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {[
-          {
-            title: 'Favoritos',
-            body: `${favoritesCount} elementos guardados para volver rápido cuando quieras.`,
-            to: '/favoritos',
-            Icon: Heart,
-          },
-          {
-            title: 'Para ti',
-            body: 'Una selección pensada según tus temas y el tipo de mascota que más te interesa.',
-            to: '/para-ti',
-            Icon: Sparkles,
-          },
-          {
-            title: 'Preferencias',
-            body: 'Ajusta tus intereses para que la experiencia se sienta más útil y ordenada.',
-            to: '/preferencias',
-            Icon: Settings2,
-          },
-          {
-            title: 'Historial',
-            body: `${historyCount} lecturas recientes para retomar sin buscar desde cero.`,
-            to: '/historial',
-            Icon: PawPrint,
-          },
-        ].map(({ title, body, to, Icon }) => (
+        {quickAccess.map(({ title, body, to, Icon, accent, cta, meta }) => (
           <div className="rounded-[2rem] bg-white p-6 shadow-soft" key={title}>
-            <Icon className="h-5 w-5 text-brand-700" />
+            <div
+              className={`inline-flex rounded-full p-3 ${
+                accent === 'brand'
+                  ? 'bg-brand-50 text-brand-700'
+                  : accent === 'mint'
+                    ? 'bg-mint-50 text-[#1f4d47]'
+                    : accent === 'cream'
+                      ? 'bg-cream-100 text-amber-700'
+                      : 'bg-slate-100 text-slate-700'
+              }`}
+            >
+              <Icon className="h-5 w-5" />
+            </div>
             <h2 className="mt-4 text-xl font-semibold text-slate-900">{title}</h2>
+            {meta ? <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{meta}</p> : null}
             <p className="mt-3 text-sm leading-7 text-slate-600">{body}</p>
             <Button className="mt-5" to={to} variant="secondary">
-              Abrir
+              {cta}
             </Button>
           </div>
         ))}
@@ -104,10 +204,8 @@ export function AccountPage() {
       <section className="rounded-[2rem] bg-white p-6 shadow-soft">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-semibold text-slate-900">Sesión y acceso</h2>
-            <p className="mt-2 text-sm leading-7 text-slate-600">
-              Tu cuenta mantiene tus favoritos y preferencias disponibles para que la web recuerde lo que te interesa.
-            </p>
+            <h2 className="text-2xl font-semibold text-slate-900">Sesión</h2>
+            <p className="mt-2 text-sm leading-7 text-slate-600">Puedes cerrar sesión cuando quieras. Tus preferencias y favoritos seguirán vinculados a tu cuenta.</p>
           </div>
           <Button onClick={() => void signOut()} variant="ghost">
             <LogOut className="mr-2 h-4 w-4" />

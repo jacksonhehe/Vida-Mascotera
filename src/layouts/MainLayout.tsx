@@ -18,6 +18,8 @@ export function MainLayout() {
   const [exploreOpen, setExploreOpen] = useState(false)
   const favoritesCount = useAppStore((state) => state.favorites.length)
   const { role, status } = useAuth()
+  const authReady = status !== 'loading'
+  const isAuthenticated = status === 'authenticated'
 
   const exploreItems = useMemo(
     () => navigationItems.filter((item) => ['perros', 'gatos', 'alimentacion', 'salud', 'accesorios'].includes(item.category)),
@@ -103,7 +105,7 @@ export function MainLayout() {
             <Link
               aria-label={`Favoritos: ${favoritesCount}`}
               className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-600 shadow-sm transition hover:text-brand-900"
-              to={status === 'authenticated' ? '/favoritos' : '/login'}
+              to={isAuthenticated ? '/favoritos' : '/login'}
             >
               <div className="relative">
                 <Heart className="h-5 w-5" />
@@ -115,7 +117,11 @@ export function MainLayout() {
               </div>
             </Link>
 
-            {status === 'authenticated' ? (
+            {!authReady ? (
+              <div className="hidden lg:block">
+                <div className="h-12 w-36 rounded-full bg-white/80 shadow-sm" />
+              </div>
+            ) : isAuthenticated ? (
               <div className="hidden items-center gap-2 lg:flex">
                 <Button to="/para-ti" variant="ghost">
                   <span className="whitespace-nowrap">Para ti</span>
@@ -191,7 +197,7 @@ export function MainLayout() {
                 </div>
               </div>
 
-              {status === 'authenticated' ? (
+              {!authReady ? null : isAuthenticated ? (
                 <>
                   <Button className="mt-2" to="/mi-cuenta" variant="secondary">
                     Mi cuenta

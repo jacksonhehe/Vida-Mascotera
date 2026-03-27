@@ -79,9 +79,7 @@ export function useAppBootstrap() {
       return
     }
 
-    void persistFavoriteKeys(favorites, profile?.id ?? null).catch(() => {
-      setError('Tus favoritos pueden tardar un poco en actualizarse, pero seguiremos intentándolo.')
-    })
+    void persistFavoriteKeys(favorites, profile?.id ?? null).catch(() => undefined)
   }, [favorites, profile?.id])
 
   useEffect(() => {
@@ -99,9 +97,7 @@ export function useAppBootstrap() {
       return
     }
 
-    void persistHistory(history, profile?.id ?? null).catch(() => {
-      setError('Tu historial reciente puede tardar un poco en sincronizarse, pero no se perderá.')
-    })
+    void persistHistory(history, profile?.id ?? null).catch(() => undefined)
   }, [history, profile?.id])
 
   useEffect(() => {

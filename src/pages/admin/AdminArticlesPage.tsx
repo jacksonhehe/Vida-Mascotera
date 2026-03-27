@@ -160,7 +160,14 @@ export function AdminArticlesPage() {
                   <tr key={article.id}>
                     <td className="px-4 py-4">
                       <div>
-                        <p className="font-semibold text-slate-900">{article.title}</p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-semibold text-slate-900">{article.title}</p>
+                          {article.featured ? (
+                            <span className="rounded-full bg-brand-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-brand-800">
+                              Destacado
+                            </span>
+                          ) : null}
+                        </div>
                         <p className="mt-1 text-sm text-slate-500">{article.author}</p>
                       </div>
                     </td>

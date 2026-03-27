@@ -29,6 +29,7 @@ function createEmptyArticle(): Article {
     category: 'blog',
     readTime: '3 min',
     author: '',
+    featured: false,
     publishedAt: now,
     updatedAt: now,
     image: '',
@@ -135,6 +136,7 @@ export function AdminArticleEditorPage() {
       excerpt: article.excerpt,
       category: article.category,
       author: article.author,
+      featured: article.featured ?? false,
       image: article.image,
       tags: article.tags.filter(Boolean),
       heroNote: article.heroNote,
@@ -332,6 +334,21 @@ export function AdminArticleEditorPage() {
               />
             </label>
           </div>
+
+          <label className="flex items-start gap-3 rounded-[1.5rem] border border-slate-200 bg-cream-50 px-4 py-4">
+            <input
+              checked={Boolean(article.featured)}
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-700 focus:ring-brand-300"
+              onChange={(event) => updateArticle({ featured: event.target.checked })}
+              type="checkbox"
+            />
+            <div>
+              <span className="block text-sm font-medium text-slate-900">Mostrar como lectura destacada</span>
+              <span className="mt-1 block text-sm leading-6 text-slate-600">
+                Este artículo podrá aparecer en la sección de lecturas destacadas de la página de inicio.
+              </span>
+            </div>
+          </label>
 
           <label className="block space-y-2">
             <span className="text-sm font-medium text-slate-700">Imagen destacada</span>

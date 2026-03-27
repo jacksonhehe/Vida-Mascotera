@@ -164,6 +164,7 @@ export interface ArticleUpsertInput {
   excerpt: string
   category: PetCategory
   author: string
+  featured?: boolean
   image: string
   tags: string[]
   heroNote: string

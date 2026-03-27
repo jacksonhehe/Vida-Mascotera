@@ -8,6 +8,10 @@ export function parseSavedItemKey(key: string): { type: SavedItemType; id: strin
   const [type, ...rest] = key.split(':')
   const id = rest.join(':')
 
+  if (!id && key) {
+    return { type: 'article', id: key }
+  }
+
   if (!id || (type !== 'article' && type !== 'product')) {
     return null
   }

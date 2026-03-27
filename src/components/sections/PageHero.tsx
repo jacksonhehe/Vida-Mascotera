@@ -4,9 +4,23 @@ interface PageHeroProps {
   title: string
   intro: string
   emphasis: string
+  primaryCta?: {
+    label: string
+    to: string
+  }
+  secondaryCta?: {
+    label: string
+    to: string
+  }
 }
 
-export function PageHero({ title, intro, emphasis }: PageHeroProps) {
+export function PageHero({
+  title,
+  intro,
+  emphasis,
+  primaryCta = { label: 'Seguir leyendo', to: '/blog' },
+  secondaryCta,
+}: PageHeroProps) {
   return (
     <section className="rounded-[2.5rem] bg-white px-6 py-10 shadow-soft md:px-10">
       <div className="max-w-3xl space-y-5">
@@ -15,10 +29,12 @@ export function PageHero({ title, intro, emphasis }: PageHeroProps) {
         <p className="text-base leading-8 text-slate-600 md:text-lg">{intro}</p>
         <p className="text-sm leading-7 text-brand-800">{emphasis}</p>
         <div className="flex flex-wrap gap-3">
-          <Button to="/blog">Seguir leyendo</Button>
-          <Button to="/contacto" variant="secondary">
-            Contactar al equipo
-          </Button>
+          <Button to={primaryCta.to}>{primaryCta.label}</Button>
+          {secondaryCta ? (
+            <Button to={secondaryCta.to} variant="secondary">
+              {secondaryCta.label}
+            </Button>
+          ) : null}
         </div>
       </div>
     </section>

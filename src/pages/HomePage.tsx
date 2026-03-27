@@ -1,4 +1,4 @@
-import { ArrowRight, HeartHandshake, ShieldCheck, Star } from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ArticleCard } from '@/components/cards/ArticleCard'
 import { CategoryCard } from '@/components/cards/CategoryCard'
@@ -14,9 +14,9 @@ interface HomePageProps {
 }
 
 export function HomePage({ articles }: HomePageProps) {
-  const featuredArticles = articles.filter((article) => article.featured).slice(0, 1)
-  const recentArticles = articles.slice(0, 3)
-  const highlightedGuides = articles.filter((article) => article.category === 'comparativas' || article.category === 'blog').slice(3, 6)
+  const highlightedArticles = articles.filter((article) => article.featured).slice(0, 3)
+  const highlightedIds = new Set(highlightedArticles.map((article) => article.id))
+  const recentArticles = articles.filter((article) => !highlightedIds.has(article.id)).slice(0, 3)
   const recentSectionCards = [
     ...recentArticles.map((article) => ({
       type: 'article' as const,
@@ -50,58 +50,20 @@ export function HomePage({ articles }: HomePageProps) {
       <Seo canonicalPath="/" />
       <HeroSection />
 
-      <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="rounded-[2rem] bg-white p-7 shadow-soft md:p-8">
+      {highlightedArticles.length > 0 ? (
+        <section className="space-y-6">
           <SectionHeading
-            description="Reunimos lecturas útiles sobre bienestar, rutina, hogar y convivencia para que encuentres ayuda clara cuando la necesites."
-            eyebrow="Empieza por aquí"
-            title="Contenido práctico para entender mejor a tu mascota."
+            description="Una selección de lecturas para entrar rápido a temas que suelen importar más en el día a día."
+            eyebrow="Lecturas destacadas"
+            title="Tres lecturas para empezar con buen criterio."
           />
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                title: 'Guías claras',
-                body: 'Explicaciones simples para entender mejor a tu mascota y actuar con más seguridad.',
-                Icon: ShieldCheck,
-              },
-              {
-                title: 'Comparativas útiles',
-                body: 'Ayudas prácticas para elegir con más calma entre opciones parecidas.',
-                Icon: Star,
-              },
-              {
-                title: 'Vida diaria',
-                body: 'Consejos pensados para la convivencia de todos los días, no solo para momentos puntuales.',
-                Icon: HeartHandshake,
-              },
-            ].map(({ title, body, Icon }) => (
-              <div className="rounded-[1.5rem] bg-cream-50 p-5" key={title}>
-                <Icon className="h-5 w-5 text-brand-700" />
-                <h3 className="mt-4 text-lg font-semibold text-slate-900">{title}</h3>
-                <p className="mt-2 text-sm leading-7 text-slate-600">{body}</p>
-              </div>
+          <div className="grid gap-6 lg:grid-cols-3">
+            {highlightedArticles.map((article) => (
+              <ArticleCard article={article} key={article.id} />
             ))}
           </div>
-        </div>
-
-        {featuredArticles[0] ? (
-          <div className="overflow-hidden rounded-[2rem] bg-brand-900 text-white shadow-soft">
-            <img alt={featuredArticles[0].title} className="h-60 w-full object-cover" src={featuredArticles[0].image} />
-            <div className="space-y-4 p-7 md:p-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-brand-100">Lectura destacada</p>
-              <h2 className="text-3xl font-semibold">{featuredArticles[0].title}</h2>
-              <p className="text-sm leading-7 text-brand-50/90">{featuredArticles[0].excerpt}</p>
-              <Link
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-white"
-                to={featuredArticles[0].category === 'comparativas' ? `/comparativas/${featuredArticles[0].slug}` : `/blog/${featuredArticles[0].slug}`}
-              >
-                Leer ahora
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        ) : null}
-      </section>
+        </section>
+      ) : null}
 
       <section className="space-y-6">
         <SectionHeading
@@ -143,44 +105,41 @@ export function HomePage({ articles }: HomePageProps) {
         </div>
       </section>
 
-      {highlightedGuides.length > 0 ? (
-        <section className="space-y-6">
-          <SectionHeading
-            description="Lecturas seleccionadas para profundizar en temas frecuentes y seguir aprendiendo con calma."
-            eyebrow="Guías destacadas"
-            title="Lecturas para resolver dudas con más contexto."
-          />
-          <div className="grid gap-6 lg:grid-cols-3">
-            {highlightedGuides.map((article) => (
-              <ArticleCard article={article} key={article.id} />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <section className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-        <div className="rounded-[2rem] bg-white p-7 shadow-soft md:p-8">
+      <section className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="rounded-[2rem] bg-white p-6 shadow-soft md:p-7">
           <SectionHeading
             description="Pequeños pasos que ayudan mucho cuando una mascota llega por primera vez a casa o cuando quieres ordenar mejor la convivencia."
             eyebrow="Primeros pasos"
             title="Tres hábitos simples que te ahorran estrés desde el inicio."
           />
-          <div className="mt-6 grid gap-4">
+          <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-1">
             {starterTips.map((tip) => (
-              <div className="rounded-[1.5rem] bg-cream-50 p-5" key={tip.id}>
-                <h3 className="text-lg font-semibold text-slate-900">{tip.title}</h3>
-                <p className="mt-2 text-sm leading-7 text-slate-600">{tip.body}</p>
+              <div className="rounded-[1.5rem] bg-cream-50 p-4" key={tip.id}>
+                <h3 className="text-base font-semibold text-slate-900">{tip.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{tip.body}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-[2rem] bg-[#1f4d47] p-7 text-white shadow-soft md:p-8">
+        <div className="rounded-[2rem] bg-[#1f4d47] p-6 text-white shadow-soft md:p-7">
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-mint-100">Comparativas útiles</p>
-          <h3 className="mt-4 text-3xl font-semibold">Decide con más claridad y menos ruido.</h3>
-          <p className="mt-4 text-base leading-8 text-mint-50/90">
+          <h3 className="mt-4 max-w-md text-3xl font-semibold">Decide con más claridad y menos ruido.</h3>
+          <p className="mt-4 max-w-lg text-base leading-8 text-mint-50/90">
             Analizamos escenarios reales, pros, límites y señales para que puedas elegir mejor entre opciones parecidas sin perder tiempo.
           </p>
+          <div className="mt-6 grid gap-3">
+            {[
+              'Arnés o collar según tu rutina de paseo.',
+              'Comedero lento o plato amplio según cómo come tu mascota.',
+              'Transportadora blanda o rígida según tus trayectos.',
+            ].map((item) => (
+              <div className="flex items-start gap-3 rounded-[1.25rem] bg-white/10 px-4 py-3" key={item}>
+                <CheckCircle2 className="mt-0.5 h-4 w-4 text-mint-100" />
+                <p className="text-sm leading-6 text-mint-50">{item}</p>
+              </div>
+            ))}
+          </div>
           <Link className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white" to="/comparativas">
             Ver comparativas
             <ArrowRight className="h-4 w-4" />

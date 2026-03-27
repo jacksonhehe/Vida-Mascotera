@@ -143,8 +143,8 @@ export function ArticleDetailPage({ article, products: _products, relatedArticle
             <p className="mt-4 text-sm leading-7 text-brand-50/90">
               Reunimos guías y comparativas para ayudarte a entender mejor este tema y tomar decisiones más simples en el día a día.
             </p>
-            <Button className="mt-6 w-full" to="/contacto" variant="secondary">
-              Consultar una colaboración
+            <Button className="mt-6 w-full" to="/comparativas" variant="secondary">
+              Ver comparativas
             </Button>
           </div>
         </aside>
