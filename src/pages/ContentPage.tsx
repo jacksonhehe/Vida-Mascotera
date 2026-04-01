@@ -23,37 +23,36 @@ const categoryPaths: Record<Exclude<PetCategory, 'inicio' | 'contacto'>, string>
 
 export function ContentPage({ category, articles }: ContentPageProps) {
   const copy = categoryCopy[category]
-  const selectedCategory = useAppStore((state) => state.selectedCategory)
   const searchTerm = useAppStore((state) => state.searchTerm)
-  const setSelectedCategory = useAppStore((state) => state.setSelectedCategory)
   const setSearchTerm = useAppStore((state) => state.setSearchTerm)
 
   useEffect(() => {
-    setSelectedCategory('todas')
     setSearchTerm('')
-  }, [category, setSearchTerm, setSelectedCategory])
+  }, [category, setSearchTerm])
 
   const filteredArticles = useMemo(
     () =>
       articles.filter((article) => {
-        const categoryMatch =
-          selectedCategory === 'todas' ? article.category === category : article.category === selectedCategory
         const searchMatch =
           searchTerm.length === 0 ||
           article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
           article.tags.join(' ').toLowerCase().includes(searchTerm.toLowerCase())
 
-        return categoryMatch && searchMatch
+        return article.category === category && searchMatch
       }),
-    [articles, category, searchTerm, selectedCategory],
+    [articles, category, searchTerm],
   )
 
   const editorialPicks = useMemo(
     () =>
       articles
         .filter((article) => article.category !== category)
-        .filter((article) => (category === 'comparativas' ? article.category === 'blog' : article.category === 'comparativas' || article.category === 'blog'))
+        .filter((article) =>
+          category === 'comparativas'
+            ? article.category === 'blog'
+            : article.category === 'comparativas' || article.category === 'blog',
+        )
         .slice(0, 3),
     [articles, category],
   )
@@ -86,36 +85,6 @@ export function ContentPage({ category, articles }: ContentPageProps) {
         }
         title={copy.title}
       />
-
-      <section className="rounded-[2rem] bg-white p-6 shadow-soft">
-        <div className="grid gap-4 md:grid-cols-[0.7fr_0.3fr]">
-          <label className="sr-only" htmlFor="content-search">
-            Buscar contenido
-          </label>
-          <input
-            className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-            id="content-search"
-            onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Buscar por tema, necesidad o palabra clave"
-            type="search"
-            value={searchTerm}
-          />
-          <label className="sr-only" htmlFor="content-filter">
-            Filtrar categoría
-          </label>
-          <select
-            className="rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-200"
-            id="content-filter"
-            onChange={(event) => setSelectedCategory(event.target.value as PetCategory | 'todas')}
-            value={selectedCategory}
-          >
-            <option value="todas">Mostrar solo esta sección</option>
-            <option value={category}>{category}</option>
-            <option value="blog">blog</option>
-            <option value="comparativas">comparativas</option>
-          </select>
-        </div>
-      </section>
 
       <section className="space-y-6">
         <div className="flex items-center justify-between gap-4">
